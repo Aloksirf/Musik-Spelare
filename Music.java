@@ -21,6 +21,14 @@ public class Music implements Comparator<Music>{
 		fileCode = null;
 	}
 	
+	public String getBand() {
+		return band;
+	}
+	
+	public String getSong() {
+		return song;
+	}
+	
 	public String toString() {
 		return band + " - " + song + " - " + playtime;
 	}
