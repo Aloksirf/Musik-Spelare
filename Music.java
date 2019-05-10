@@ -4,24 +4,24 @@ public class Music implements Comparator<Music>{
 	
 	public String band;
 	public String song;
-	public int songLength;
+	public int playtime;
 	public String fileCode;
 	
 	public Music(String b, String s, int l, String c) {
 		band = b;
 		song = s;
-		songLength = l;
+		playtime = l;
 		fileCode = c;
 	}
 	
 	public Music() {
 		band = null;
 		song = null;
-		songLength = 0;
+		playtime = 0;
 		fileCode = null;
 	}
 	
 	public String toString() {
-		return band + " - " + song + " - " + songLength;
+		return band + " - " + song + " - " + playtime;
 	}
 }
