@@ -18,7 +18,7 @@ public class Music implements Comparator<Music>{
 		band = null;
 		song = null;
 		songLength = 0;
-		code = null;
+		fileCode = null;
 	}
 	
 	public String toString() {
