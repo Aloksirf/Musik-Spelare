@@ -5,13 +5,13 @@ public class Music implements Comparator<Music>{
 	public String band;
 	public String song;
 	public int songLength;
-	public String code;
+	public String fileCode;
 	
 	public Music(String b, String s, int l, String c) {
 		band = b;
 		song = s;
 		songLength = l;
-		code = c;
+		fileCode = c;
 	}
 	
 	public Music() {
