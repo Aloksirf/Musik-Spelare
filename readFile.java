@@ -2,54 +2,19 @@ import java.io.*;
 import java.util.*;
 
 public class readFile {
+	static Scanner in = new Scanner(System.in);
+	static PrintWriter write = null;
 
 	public static void main(String[] args) {
-		System.out.println("What would you like to do? ");
-		System.out.println("1. Add a new Song to a list");
-		System.out.println("2. Get a list");
-		System.out.println("3. Exit");
+		
+		printMenu();
+		int scan = in.nextInt();
 
-		try {
-			Scanner readIn = new Scanner(System.in);
-			int scan = readIn.nextInt();
-
-			while (scan != 3) {
-				System.out.println("Type in your choice: ");
-				scan = readIn.nextInt();
-				switch (scan) {
-
-				case 1: {
-					System.out.println("Type the name of the list you wish to add:");
-					String scann = readIn.next();
-					addSong(scann);
-					break;
-				}
-				case 2: {
-					System.out.println("Type in the name of the list:");
-					String read = readIn.next();
-					ArrayList<Music> a = readInFile(read);
-					for (int i = 0; i < a.size(); i++) {
-						System.out.println(a.get(i));
-					}
-					System.out.println();
-					// Music b = a.get(0);
-					// System.out.println(a);
-					break;
-				}
-				case 4: {
-					break;
-				}
-				case 3: {
-					System.exit(0);
-					break;
-				}
-				}
-
-			}
-			readIn.close();
-
-		} catch (Exception e) {
-			System.out.println(e);
+		while (scan != 3) {
+			choices(scan);
+			printMenu();
+			scan = in.nextInt();
+			in.nextLine();
 		}
 
 	}
@@ -81,25 +46,30 @@ public class readFile {
 		return null;
 
 	}
+
 	/**
 	 * Adds a song to the decided list.
 	 * 
-	 * @param listName		the name of the list. 
+	 * @param listName the name of the list.
 	 */
 	public static void addSong(String listName) {
 		try {
-			Scanner in = new Scanner(System.in);
-			PrintWriter write = new PrintWriter(new FileWriter(listName), true);
+			String total = "";
+			
 			System.out.println("Type in the name of the Band/Group/Artist:");
-			write.print(in.nextLine() + ", ");
+			total += in.nextLine() + ", ";
 			System.out.println("Type in the name of the Song:");
-			write.print(in.nextLine() + ", ");
+			total += in.nextLine() + ", ";
 			System.out.println("Type in the length of the Song (in seconds):");
-			write.print(in.nextLine() + ", ");
+			total += in.nextInt() + ", ";
 			System.out.println("Type in the name of the file:");
-			write.println(in.nextLine());
+			String temp= in.nextLine();
+			temp= in.nextLine();
+			total += temp;
+			
+			write = new PrintWriter(new BufferedWriter(new FileWriter((listName), true)));
+			write.println(total);
 
-			in.close();
 			write.close();
 			return;
 
@@ -109,4 +79,41 @@ public class readFile {
 		return;
 	}
 
+	/**
+	 * Prints the menu.
+	 */
+	public static void printMenu() {
+		System.out.println("What would you like to do? ");
+		System.out.println("1. Add a new Song to a list");
+		System.out.println("2. Get a list");
+		System.out.println("3. Exit");
+
+		System.out.print("\nEnter your choice: ");
+	}
+
+	public static void choices(int scan) {
+		switch (scan) {
+
+		case 1: {
+			System.out.println("Type the name of the list you wish to add:");
+			String scann = in.nextLine();
+			addSong(scann);
+			break;
+		}
+		case 2: {
+			System.out.println("Type in the name of the list:");
+			String read = in.next();
+			ArrayList<Music> a = readInFile(read);
+			for (int i = 0; i < a.size(); i++) {
+				System.out.println(a.get(i));
+			}
+			System.out.println();
+			break;
+		}
+		case 3: {
+			System.exit(0);
+		}
+			break;
+		}
+	}
 }
