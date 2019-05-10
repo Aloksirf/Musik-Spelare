@@ -28,39 +28,57 @@ public class Hashing {
 		addByTime(Song);
 		
 	}
-	public void addByBand(Music Song) {
+	private void addByBand(Music Song) {
 		int index= 0;
 		String bandCode=Song.getBand();
 		for(int i=0;i<bandCode.length() ; i++) {
 			index+=(int)bandCode.charAt(i);
 		}
-		
-
+		//checks where to add, sorted manner.
+		if(HashBand.get(index)!=null) {
+			while(HashBand.get(index).band.compareTo(Song.band)>0||HashBand.get(index)!=null) {
+				index++;
+			}
+		}
 		HashBand.add(index, Song);
 	}
-	public void addBySong(Music Song) {
+	private void addBySong(Music Song) {
 		int index= 0;
 		String Code=Song.getSong();
 		for(int i=0;i<Code.length() ; i++) {
 			index+=(int)Code.charAt(i);
 		}
 		
+		if(HashSong.get(index)!=null) {
+			while(HashSong.get(index).song.compareTo(Song.band)>0||HashSong.get(index)!=null) {
+				index++;
+			}
+		}
+		HashBand.add(index, Song);
 
-		HashSong.add(index, Song);
+
 		
 		
 	}
-	public void addByTime(Music Song) {
+	private void addByTime(Music Song) {
 		int Code=Song.playtime;
+		
+		while(HashTime.get(Code).playtime-Song.playtime!=0|| HashTime.get(Code)!=null)
+			Code++;
 		HashTime.add(Code, Song);
 		
 		
 	}
 	
 	
-	
+	/**
+	 * Returns a music array with the songs from a chosen band. 
+	 * @param Name
+	 * @return
+	 */
 	public Music[] GetBand(String Name) {
 		int index= 0;
+		Music[] Array=new Music[150];
 		String Code=Name;
 		for(int i=0;i<Code.length() ; i++) {
 			index+=(int)Code.charAt(i);
@@ -68,8 +86,16 @@ public class Hashing {
 		while(HashBand.get(index).band.compareTo(Name)!=0) {
 			index++;
 		}
-		return HashBand.get(index);
+		for(int i=0;HashBand.get(index+i).band.compareTo(Name)==0;i++) {
+			Array[i]=HashBand.get(index+i);
+		}
+		return Array;
 	}
+	/**
+	 * Returns a Music with the same song name.
+	 * @param Name
+	 * @return
+	 */
 	public Music GetSong(String Name) {
 		int index= 0;
 		String Code=Name;
@@ -83,6 +109,11 @@ public class Hashing {
 	}
 	
 	
+	/**
+	 * Returns a Music array with songs with the same PlayTime.
+	 * @param time
+	 * @return
+	 */
 	public Music[] GetTime(int time) {
 		int index= time;
 		Music[] Array=new Music[40];
