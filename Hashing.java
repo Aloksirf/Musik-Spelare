@@ -21,7 +21,10 @@ public class Hashing {
 		HashTime=null;
 	}
 	
-	
+	/**
+	 * Adds a music in all hashlists.
+	 * @param Song
+	 */
 	public void addInAll(Music Song) {
 		addByBand(Song);
 		addBySong(Song);
@@ -61,7 +64,7 @@ public class Hashing {
 		
 	}
 	private void addByTime(Music Song) {
-		int Code=Song.playtime;
+		int Code=(int)Song.playtime;
 		
 		while(HashTime.get(Code).playtime-Song.playtime!=0|| HashTime.get(Code)!=null)
 			Code++;
@@ -114,8 +117,8 @@ public class Hashing {
 	 * @param time
 	 * @return
 	 */
-	public Music[] GetTime(int time) {
-		int index= time;
+	public Music[] GetTime(long time) {
+		  int index= (int)time;
 		Music[] Array=new Music[40];
 
 		while(HashTime.get(index).playtime-time!=0) {
