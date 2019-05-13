@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class PlayList {
 
-	ArrayList<E> Songs=null;
+	ArrayList<Music> Songs=null;
 	
 	public void savePlayList( String name) {
 		
