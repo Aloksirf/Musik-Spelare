@@ -1,16 +1,29 @@
 import java.io.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JOptionPane;
+import javax.sound.sampled.*;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.*;
 
 public class readFile {
 	static Scanner in = new Scanner(System.in);
 	static PrintWriter write = null;
+	static Clip musicFile = null;
+	static JTextField jfText;
+	static int counter = 0;
 
 	public static void main(String[] args) {
-		
+
 		printMenu();
 		int scan = in.nextInt();
 
-		while (scan != 3) {
+		while (scan != 4) {
 			choices(scan);
 			printMenu();
 			scan = in.nextInt();
@@ -55,7 +68,7 @@ public class readFile {
 	public static void addSong(String listName) {
 		try {
 			String total = "";
-			
+
 			System.out.println("Type in the name of the Band/Group/Artist:");
 			total += in.nextLine() + ", ";
 			System.out.println("Type in the name of the Song:");
@@ -63,10 +76,10 @@ public class readFile {
 			System.out.println("Type in the length of the Song (in seconds):");
 			total += in.nextInt() + ", ";
 			System.out.println("Type in the name of the file:");
-			String temp= in.nextLine();
-			temp= in.nextLine();
+			String temp = in.nextLine();
+			temp = in.nextLine();
 			total += temp;
-			
+
 			write = new PrintWriter(new BufferedWriter(new FileWriter((listName), true)));
 			write.println(total);
 
@@ -86,7 +99,8 @@ public class readFile {
 		System.out.println("What would you like to do? ");
 		System.out.println("1. Add a new Song to a list");
 		System.out.println("2. Get a list");
-		System.out.println("3. Exit");
+		System.out.println("3. Start MusicPlayer");
+		System.out.println("4. Exit");
 
 		System.out.print("\nEnter your choice: ");
 	}
@@ -111,9 +125,16 @@ public class readFile {
 			break;
 		}
 		case 3: {
-			System.exit(0);
-		}
+			musicPlayer mus = new musicPlayer();
+			mus.setVisible(true);
+			mus.setAlwaysOnTop(false);
 			break;
 		}
+		case 4: {
+			System.exit(0);
+			break;
+		}
+		}
 	}
+
 }
