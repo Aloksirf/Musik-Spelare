@@ -1,8 +1,9 @@
 package muplay;
-
+import java.io.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -11,19 +12,20 @@ import java.util.Scanner;
 public class PlayList {
 
 	ArrayList<Music> Songs=null;
+	String playList="";
 	
 	public void savePlayList( String name) {
-		
+		playList=name;
 		String output = "";
 		while(!Songs.isEmpty()) {
-			output = Songs.remove(0) + /n;
+			output = Songs.remove(0) + "/n";
 		}
 		
 		 PrintWriter filout=null;
 	      
 	      try{
 	      
-	         filout=new PrintWriter(new BufferedWriter(new FileWriter(name, true)));
+	         filout=new PrintWriter(new BufferedWriter(new FileWriter(name, false)));
 	         
 	      	
 	         filout.write(output);
@@ -55,7 +57,11 @@ public class PlayList {
 		
 		return Songs;
 	}
-	public void addToPlayList() {
+	public void addToPlayList(String SongName, Hashing lib) throws FileNotFoundException {
+		Songs.add(lib.GetSong(SongName));
+		
+		savePlayList(playList);
+		loadPlayList(playList);
 		
 	}
 	public Music[] sortPlayList() {
