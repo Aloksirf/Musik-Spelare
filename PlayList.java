@@ -70,4 +70,9 @@ public class PlayList {
 		
 	}
 	
+	public void printPlaylist() {
+		for(int i =0; i<Songs.size();i++)
+		Songs.get(i).printInfo();
+	}
+	
 }
