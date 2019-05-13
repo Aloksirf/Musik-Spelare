@@ -1,140 +1,178 @@
-import java.io.*;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.sound.sampled.*;
-import javax.swing.*;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.util.*;
 
-public class readFile {
-	static Scanner in = new Scanner(System.in);
-	static PrintWriter write = null;
-	static Clip musicFile = null;
-	static JTextField jfText;
-	static int counter = 0;
+public class musicPlayer extends JFrame implements ActionListener, KeyListener {
 
-	public static void main(String[] args) {
+	private Clip musicFile = null;
+	private JFrame jf;
+	private JTextField jfText;
+	private int counter = 0;
 
-		printMenu();
-		int scan = in.nextInt();
+	/**
+	 * Constructor
+	 */
+	public musicPlayer() {
+		super("musicPlayer");
+		setSize(500, 122);
+		setAlwaysOnTop(true);
+		jf = new JFrame("MusicPlayer");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLayout(new FlowLayout()); // Så knapparna inte hamnar på varandra! Annan Layout!
+		setLocation(200, 200); // Var fönstret ska börja (x,y)
+		setResizable(false);
 
-		while (scan != 4) {
-			choices(scan);
-			printMenu();
-			scan = in.nextInt();
-			in.nextLine();
-		}
+		// Textbox, den kan bara ladda .wav-filer
+		// Man behöver bara skriva "test", den lägger till .wav själv.
+		jfText = new JTextField("Enter the name of your music file here.", 30);
 
+		// Knappar
+		JButton b1 = new JButton("Play");
+		JButton b2 = new JButton("Pause/Unpause");
+		JButton b3 = new JButton("Stop");
+		getContentPane().add(jfText);
+
+		// Gör så knapparna reagerar på knapptryck
+		b1.addActionListener(this);
+		b2.addActionListener(this);
+		b3.addActionListener(this);
+		
+		// Används endast när vi trycker ENTER för att starta en låt.
+		jfText.addKeyListener(this);
+
+		// Lägger till knapparna i JFrame
+		add(b1, BorderLayout.SOUTH);
+		add(b2, BorderLayout.SOUTH);
+		add(b3, BorderLayout.SOUTH);
+
+		// Menu
+		JMenuBar menuBar = new JMenuBar();
+		JMenu m = new JMenu("File");
+		JMenu m2 = new JMenu("Help");
+		menuBar.add(m);
+		menuBar.add(m2);
+		JMenuItem item1 = new JMenuItem("Open Sound");
+		JMenuItem item2 = new JMenuItem("Exit");
+		JMenuItem item3 = new JMenuItem("About");
+		m.add(item1).addActionListener(this);
+		m.add(item2).addActionListener(this);
+		m2.add(item3).addActionListener(this);
+		setJMenuBar(menuBar);
+		//pack();   //Allt på samma rad, ser också till att allt du lagt till kommer med i rutan!!
 	}
 
 	/**
-	 * Reads in a file and creates new music objects to an ArrayList
+	 * Starting to play the sound on your computer.
 	 * 
-	 * @param fileName The name of the file.
-	 * @return The ArrayList filled with music-objects.
+	 * @param file The name of the file.
 	 */
-	public static ArrayList<Music> readInFile(String fileName) {
+	public void playSound(String file) {
 		try {
-			Scanner read = new Scanner(new File(fileName));
-			ArrayList<Music> newList = new ArrayList<Music>();
-
-			while (read.hasNext()) {
-				String line = read.nextLine();
-				String[] split = line.split(", ");
-				Music mus = new Music(split[0], split[1], Integer.parseInt(split[2]), split[3]);
-				newList.add(mus);
-			}
-
-			read.close();
-			return newList;
-
+			AudioInputStream audio = AudioSystem.getAudioInputStream(new File(file));
+			musicFile = AudioSystem.getClip();
+			musicFile.open(audio);
+			musicFile.start();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		return null;
-
 	}
 
 	/**
-	 * Adds a song to the decided list.
-	 * 
-	 * @param listName the name of the list.
+	 * Opens up the current directory for you to choose a .wav-file. Start playing
+	 * the sound once open.
 	 */
-	public static void addSong(String listName) {
-		try {
-			String total = "";
+	public void openSound() {
+		JFileChooser choice = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("wav", "WAV");
+		choice.setFileFilter(filter);
+		choice.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		int result = choice.showOpenDialog(jfText);
 
-			System.out.println("Type in the name of the Band/Group/Artist:");
-			total += in.nextLine() + ", ";
-			System.out.println("Type in the name of the Song:");
-			total += in.nextLine() + ", ";
-			System.out.println("Type in the length of the Song (in seconds):");
-			total += in.nextInt() + ", ";
-			System.out.println("Type in the name of the file:");
-			String temp = in.nextLine();
-			temp = in.nextLine();
-			total += temp;
-
-			write = new PrintWriter(new BufferedWriter(new FileWriter((listName), true)));
-			write.println(total);
-
-			write.close();
-			return;
-
-		} catch (Exception e) {
-			System.out.println(e);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = choice.getSelectedFile();
+			playSound(selectedFile.getName());
+			String fName = selectedFile.getName().replace(".wav", "");
+			jfText.setText(fName);
 		}
-		return;
 	}
 
-	/**
-	 * Prints the menu.
-	 */
-	public static void printMenu() {
-		System.out.println("What would you like to do? ");
-		System.out.println("1. Add a new Song to a list");
-		System.out.println("2. Get a list");
-		System.out.println("3. Start MusicPlayer");
-		System.out.println("4. Exit");
-
-		System.out.print("\nEnter your choice: ");
-	}
-
-	public static void choices(int scan) {
-		switch (scan) {
-
-		case 1: {
-			System.out.println("Type the name of the list you wish to add:");
-			String scann = in.nextLine();
-			addSong(scann);
-			break;
-		}
-		case 2: {
-			System.out.println("Type in the name of the list:");
-			String read = in.next();
-			ArrayList<Music> a = readInFile(read);
-			for (int i = 0; i < a.size(); i++) {
-				System.out.println(a.get(i));
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand() == "Play") {
+			counter = 0;
+			playSound(jfText.getText() + ".wav");
+			jfText.setText(jfText.getText());
+		} else if (e.getActionCommand() == "Stop") {
+			counter = 1;
+			if (musicFile == null) {
+				JOptionPane.showMessageDialog(jf, "No Audio-file loaded.");
+			} else {
+				if (!musicFile.isRunning()) {
+					JOptionPane.showMessageDialog(jf, "No Audio running.");
+				} else {
+					musicFile.stop();
+					musicFile = null;	// ELLER använd musicFile.close() , detta ändrar hur vi använder oss av Pause/Unpause. (Om en stoppad fil ska kunna startas igen eller ej!)
+					
+				}
 			}
-			System.out.println();
-			break;
-		}
-		case 3: {
-			musicPlayer mus = new musicPlayer();
-			mus.setVisible(true);
-			mus.setAlwaysOnTop(false);
-			break;
-		}
-		case 4: {
+		} else if (e.getActionCommand() == "Open Sound") {
+			openSound();
+		} else if (e.getActionCommand() == "Pause/Unpause") {
+			if (musicFile == null) {
+				JOptionPane.showMessageDialog(jf, "No Audio-file loaded.");
+			} else {
+				counter++;
+				long saveClipTime = musicFile.getMicrosecondPosition();
+				if (counter % 2 == 0) {
+					musicFile.setMicrosecondPosition(saveClipTime);
+					musicFile.start();
+				} else {
+					musicFile.stop();
+				}
+			}
+
+		} else if (e.getActionCommand() == "About") {
+			playSound("victory.wav");
+			JOptionPane.showMessageDialog(jf, "MADE BY THE AMAZING TEAM!!!");
+		} else if (e.getActionCommand() == "Exit") {
 			System.exit(0);
-			break;
 		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			counter = 0;
+			playSound(jfText.getText() + ".wav");
 		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+
 	}
 
 }
