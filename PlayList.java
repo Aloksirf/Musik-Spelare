@@ -1,10 +1,10 @@
-package muplay;
 
 public class PlayList {
 
 	
 	
 	public void savePlayList() {
+		System.out.println("asda");
 		
 	}
 	public Music[] loadPlayList(String name) {
