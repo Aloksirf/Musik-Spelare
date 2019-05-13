@@ -1,4 +1,3 @@
-package muplay;
 import java.io.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,8 +16,10 @@ public class PlayList {
 	public void savePlayList( String name) {
 		playList=name;
 		String output = "";
+		ArrayList<Music> CopySongs = Songs;
 		while(!Songs.isEmpty()) {
-			output = Songs.remove(0) + "/n";
+			output = CopySongs.get(0).band+ ", " +CopySongs.get(0).song+ ", " + CopySongs.get(0).playtime + ", "+ CopySongs.get(0).fileCode +"/n";
+			CopySongs.remove(0);
 		}
 		
 		 PrintWriter filout=null;
