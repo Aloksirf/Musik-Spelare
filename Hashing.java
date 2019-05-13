@@ -53,7 +53,7 @@ public class Hashing {
 		}
 		
 		if(HashSong.get(index)!=null) {
-			while(HashSong.get(index).song.compareTo(Song.band)>0||HashSong.get(index)!=null) {
+			while(HashSong.get(index).song.compareTo(Song.song)>0||HashSong.get(index)!=null) {
 				index++;
 			}
 		}
