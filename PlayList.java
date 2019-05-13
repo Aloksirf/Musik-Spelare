@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 public class PlayList {
 
+	ArrayList<E> Songs=null;
 	
-	
-	public void savePlayList(ArrayList<E> Songs, String name) {
+	public void savePlayList( String name) {
 		
 		String output = "";
 		while(!Songs.isEmpty()) {
@@ -39,7 +39,7 @@ public class PlayList {
 			String[] info=line.split(", ");
 			
 			Music mus=new Music(info[0],info[1],Long.parseLong(info[2]),info[3] );
-			
+			Songs.add(mus);
 			
 			
 		}
