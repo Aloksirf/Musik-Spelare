@@ -1,4 +1,12 @@
+package muplay;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class PlayList {
 
@@ -31,7 +39,8 @@ public class PlayList {
 		
 		
 	}
-	public Music[] loadPlayList(String name) throws FileNotFoundException {
+	public ArrayList<Music> loadPlayList(String name) throws FileNotFoundException {
+		@SuppressWarnings("resource")
 		Scanner reader= new Scanner(new FileReader(new File(name+".txt")));
 		
 		while(reader.hasNext()) {
@@ -44,7 +53,7 @@ public class PlayList {
 			
 		}
 		
-		return null;
+		return Songs;
 	}
 	public void addToPlayList() {
 		
