@@ -35,7 +35,11 @@ public class PlayList {
 		Scanner reader= new Scanner(new FileReader(new File(name+".txt")));
 		
 		while(reader.hasNext()) {
-			Music mus=();
+			String line=reader.nextLine();
+			String[] info=line.split(", ");
+			
+			Music mus=new Music(info[0],info[1],Long.parseLong(info[2]),info[3] );
+			
 			
 			
 		}
