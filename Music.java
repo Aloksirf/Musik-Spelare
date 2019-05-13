@@ -1,13 +1,12 @@
-import java.util.*;
 
-public class Music implements Comparator<Music>{
+public class Music {
 	
 	public String band;
 	public String song;
-	public int playtime;
+	public long playtime;
 	public String fileCode;
 	
-	public Music(String b, String s, int l, String c) {
+	public Music(String b, String s, long l, String c) {
 		band = b;
 		song = s;
 		playtime = l;
@@ -31,5 +30,8 @@ public class Music implements Comparator<Music>{
 	
 	public String toString() {
 		return band + " - " + song + " - " + playtime;
+}
+	public void printInfo() {
+		System.out.println(band+": "+song+ " with PlayTime: "+playtime);
 	}
 }
