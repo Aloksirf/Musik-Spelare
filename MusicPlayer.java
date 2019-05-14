@@ -1,12 +1,10 @@
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -25,15 +23,19 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 
 	private Clip musicFile = null;
 	private JFrame jf;
-	private JTextField jfText;
+	private JTextField jfText, textPlayList;
 	private int counter = 0;
 	public String getSong;
 	public String getPlayList;
+	public PlayList myPlayList;
 
 	/** Constructor */
 	public MusicPlayer() {
 		super("MusicPlayer");
 		setAlwaysOnTop(true);
+		setSize(300, 165);
+		textPlayList = new JTextField("Active Playlist: ", 30);
+		textPlayList.setEditable(false);
 		jf = new JFrame("MusicPlayer");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new FlowLayout()); // Så knapparna inte hamnar på varandra! Annan Layout!
@@ -48,7 +50,13 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		JButton b1 = new JButton("");
 		JButton b2 = new JButton("");
 		JButton b3 = new JButton("");
-		getContentPane().add(jfText);
+		add(jfText);
+		add(textPlayList);
+
+		// Lägger till knapparna i JFrame
+		add(b1, BorderLayout.SOUTH);
+		add(b2, BorderLayout.NORTH);
+		add(b3, BorderLayout.SOUTH);
 
 		b1.setOpaque(false);
 		b1.setContentAreaFilled(false);
@@ -111,11 +119,6 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		// Används endast när vi trycker ENTER för att starta en låt.
 		jfText.addKeyListener(this);
 
-		// Lägger till knapparna i JFrame
-		add(b1, BorderLayout.SOUTH);
-		add(b2, BorderLayout.SOUTH);
-		add(b3, BorderLayout.SOUTH);
-
 		// Menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu m = new JMenu("File");
@@ -139,7 +142,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		JMenuItem item2 = new JMenuItem("Exit", new ImageIcon("Images/exit.png"));
 		JMenuItem item3 = new JMenuItem("About", new ImageIcon("Images/about.png"));
 		JMenuItem item9 = new JMenuItem("New", new ImageIcon("Images/newfile.png"));
-		JMenuItem item10 = new JMenuItem("Add Song", new ImageIcon("Images/newfile.png"));
+		JMenuItem item10 = new JMenuItem("Add Song", new ImageIcon("Images/add.png"));
 
 		m.add(item1).addActionListener(this);
 		m.add(item2).addActionListener(this);
@@ -157,7 +160,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		m4.add(item7).addActionListener(this);
 
 		setJMenuBar(menuBar);
-		pack(); // Allt på samma rad, ser också till att allt du lagt till kommer med
+		// pack(); // Allt på samma rad, ser också till att allt du lagt till kommer med
 		// i rutan!!
 	}
 
@@ -213,8 +216,8 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 				getPlayList = listName;
 				System.out.println();
 				System.out.println();
-				System.out.println("------- Successfully loaded playlist: " + listName + " -------");
 				PlayList.loadPlayList(listName);
+				System.out.println("------- Successfully loaded playlist: " + listName + " -------");
 				PlayList.printPlayList();
 			} catch (Exception e) {
 				System.out.println(e);
@@ -227,39 +230,74 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		if (e.getActionCommand() == "Open Sound") {
 			openSound();
 		} else if (e.getActionCommand() == "Band") {
-			System.out.println();
-			System.out.println("------- Sorted by Band -------");
-			PlayList.sortList("band");
-			PlayList.printPlayList();
+			if (getPlayList != null) {
+				System.out.println();
+				System.out.println("------- Sorted by Band -------");
+				PlayList.sortList("band");
+				PlayList.printPlayList();
+			} else {
+				JOptionPane.showMessageDialog(this, "You need to load or make a new playlist first!", "", 2);
+			}
 		} else if (e.getActionCommand() == "Open") {
 			openPlayList();
+			textPlayList.setText("Active Playlist:     " + getPlayList);
 		} else if (e.getActionCommand() == "Playtime") {
-			System.out.println();
-			System.out.println("------- Sorted by Playtime -------");
-			PlayList.sortList("playtime");
-			PlayList.printPlayList();
+			if (getPlayList != null) {
+				System.out.println();
+				System.out.println("------- Sorted by Playtime -------");
+				PlayList.sortList("playtime");
+				PlayList.printPlayList();
+			} else {
+				JOptionPane.showMessageDialog(this, "You need to load or make a new playlist first!", "", 2);
+			}
 		} else if (e.getActionCommand() == "Filecode") {
-			System.out.println();
-			System.out.println("------- Sorted by Filecode -------");
-			PlayList.sortList("filecode");
-			PlayList.printPlayList();
+			if (getPlayList != null) {
+				System.out.println();
+				System.out.println("------- Sorted by Filecode -------");
+				PlayList.sortList("filecode");
+				PlayList.printPlayList();
+			} else {
+				JOptionPane.showMessageDialog(this, "You need to load or make a new playlist first!", "", 2);
+			}
 		} else if (e.getActionCommand() == "Song") {
-			System.out.println();
-			System.out.println("------- Sorted by Song -------");
-			PlayList.sortList("song");
-			PlayList.printPlayList();
+			if (getPlayList != null) {
+				System.out.println();
+				System.out.println("------- Sorted by Song -------");
+				PlayList.sortList("song");
+				PlayList.printPlayList();
+			} else {
+				JOptionPane.showMessageDialog(this, "You need to load or make a new playlist first!", "", 2);
+			}
 		} else if (e.getActionCommand() == "About") {
 			playSound("victory.wav");
 			JOptionPane.showMessageDialog(this, "MADE BY THE AMAZING TEAM!!!");
 		} else if (e.getActionCommand() == "New") {
-			PlayList.sortList("band");
-			PlayList.printPlayList();
+			String s = JOptionPane.showInputDialog(this, "Enter name of new Playlist", "Enter name of the playlist", 1);
+			if (s != null) {
+				if (!s.equals("")) {
+					try {
+						PlayList.makeNewPlayList(s);
+						JOptionPane.showMessageDialog(this, "Successfully created your new Playlist:\n" + s + ".txt");
+					} catch (Exception ex) {
+						System.out.println(ex);
+					}
+				} else {
+					JOptionPane.showMessageDialog(this, "Your playlist needs a name! \n No playlist added.", "", 1);
+				}
+			}
 		} else if (e.getActionCommand() == "Add Song") {
-			PlayList.sortList("band");
-			PlayList.printPlayList();
+			String s = JOptionPane.showInputDialog(this, "Enter name of Playist", "", 1);
+			try {
+				String str = JOptionPane.showInputDialog(this, "Enter song to add", "", 1);
+				PlayList.addToPlayList(str, MainFile.library);
+				JOptionPane.showMessageDialog(this, "Successfully added " + s + " to your playlist.");
+				PlayList.printPlayList();
+			} catch (Exception ex) {
+				System.out.println(ex);
+			}
 		} else if (e.getActionCommand() == "Exit") {
 			int option = JOptionPane.showConfirmDialog(this, "Do you really want to exit?");
-			if (option == 0) { // Om option är "Ja"
+			if (option == 0) {
 				System.exit(0);
 			}
 		}
