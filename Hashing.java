@@ -1,4 +1,4 @@
-package muplay;
+﻿package muplay;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,7 +16,7 @@ public class Hashing {
 	public ArrayList<Music> HashTime;
 	
 	public Hashing() {
-		HashBand=null;
+		HashBand=null; 
 		HashSong=null;
 		HashTime=null;
 	}
