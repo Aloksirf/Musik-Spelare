@@ -139,8 +139,15 @@ public class PlayList {
 	}
 
 	public static void printPlayList() {
-		for (int i = 0; i < songs.size(); i++)
-			songs.get(i).printInfo();
+		final Object[][] table = new String[songs.size()][];
+		for (int i = 0; i < songs.size(); i++) {
+			table[i] = new String[] { songs.get(i).band, songs.get(i).song, songs.get(i).playtime + "s" };
+
+		}
+		for (final Object[] row : table) {
+			System.out.format("%-15s%-15s%-15s\n", row);
+		}
+		System.out.println();
 	}
 
 }
