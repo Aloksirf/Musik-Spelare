@@ -1,3 +1,4 @@
+package muplay;
 import java.io.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,13 +7,48 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
 
-public class PlayList {
+import javax.swing.JFrame;
+import javax.swing.JTextField;
 
-	static ArrayList<Music> songs=new ArrayList<Music>();
+
+public class PlayList {
+	
+	
+	
+
+	static ArrayList<Music> songs;
 	static String playList="";
+	
+	
+	
+	/**
+	 * Makes a new playlist pop up window to add name in.
+	 */
+	public PlayList() {
+		
+		JFrame frame=new JFrame("New Playlist");
+			
+		songs=new ArrayList<Music>();
+		
+		JTextField textField=new JTextField("Please write a save file name.");
+		frame.getContentPane().add(textField);
+		
+		playList=textField.getText();
+
+		savePlayList(playList);
+
+	}
+	public PlayList(String name) throws FileNotFoundException {
+		
+		songs=new ArrayList<Music>();
+		playList=name;
+		//Loads a playlist.
+		loadPlayList(playList);
+		
+	}
+	
 	
 	public static void savePlayList( String name) {
 		 PrintWriter filout=null;
@@ -68,6 +104,12 @@ public class PlayList {
 		
 		return songs;
 	}
+	/**
+	 * 
+	 * @param SongName name of the song to add
+	 * @param lib what hash to get music file from.
+	 * @throws FileNotFoundException
+	 */
 	public void addToPlayList(String SongName, Hashing lib) throws FileNotFoundException {
 		songs.add(lib.GetSong(SongName));
 		
@@ -81,12 +123,12 @@ public class PlayList {
 	 * @param pref     User input on how the list will be sorted.
 	 * @return sortedList The sorted list.
 	 */
-	public static void sortList(String pref) {
+	public void sortList(String pref) {
 
 		if (pref.equals("band")) {
 			Collections.sort(songs, new BandComparator());
 		} else if (pref.equals("song")) {
-			Collections.sort(songs, new SongComparator()); 
+			Collections.sort(songs, new SongComparator());
 		} else if (pref.equals("playtime")) {
 			Collections.sort(songs, new PlaytimeComparator());
 		} else if (pref.equals("filecode")) {
