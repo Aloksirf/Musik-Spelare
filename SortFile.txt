@@ -1,0 +1,28 @@
+	/**
+	 * Method that sorts a list according to the users input.
+	 * 
+	 * @param pref     User input on how the list will be sorted.
+	 * @param hashList The HashTabell/list that contains all Music-object.
+	 * @return sortedList The sorted list.
+	 */
+	public ArrayList<Music> sortList(String pref, Music[] hashList) {
+
+		ArrayList<Music> sortedList = new ArrayList<Music>();
+
+		for (int i = 0; i < hashList.length; i++) {
+			if (hashList[i] != null) {
+				sortedList.add(hashList[i]);
+			}
+		}
+
+		if (pref.equals("band")) {
+			Collections.sort(sortedList, new BandComparator());
+		} else if (pref.equals("song")) {
+			Collections.sort(sortedList, new SongComparator());
+		} else if (pref.equals("playtime")) {
+			Collections.sort(sortedList, new PlaytimeComparator());
+		} else if (pref.equals("filecode")) {
+			Collections.sort(sortedList, new FilecodeComparator());
+		}
+		return sortedList;
+	}

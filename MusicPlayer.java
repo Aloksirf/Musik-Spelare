@@ -47,7 +47,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		jfText = new JTextField("Enter the name of your music file here.", 30);
 
 		// Knappar
-		
+
 		// JButton b1 = new JButton("Play");
 		// JButton b2 = new JButton("Pause/Unpause");
 		// JButton b3 = new JButton("Stop");
@@ -60,11 +60,10 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		b1.setContentAreaFilled(false);
 		b1.setBorderPainted(false);
 
-		
 		b2.setOpaque(false);
 		b2.setContentAreaFilled(false);
 		b2.setBorderPainted(false);
-		
+
 		b3.setOpaque(false);
 		b3.setContentAreaFilled(false);
 		b3.setBorderPainted(false);
@@ -202,7 +201,6 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 					musicFile.stop();
 					musicFile = null; // ELLER använd musicFile.close() , detta ändrar hur vi använder oss av
 										// Pause/Unpause. (Om en stoppad fil ska kunna startas igen eller ej!)
-
 				}
 			}
 		} else if (e.getActionCommand() == "Open Sound") {
@@ -241,7 +239,10 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			playSound("victory.wav");
 			JOptionPane.showMessageDialog(this, "MADE BY THE AMAZING TEAM!!!");
 		} else if (e.getActionCommand() == "Exit") {
-			System.exit(0);
+			int option = JOptionPane.showConfirmDialog(this, "Do you really want to exit?");
+			if (option == 0) {	//Om option är "Ja"
+				System.exit(0);
+			}
 		}
 	}
 
