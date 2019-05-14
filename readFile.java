@@ -1,4 +1,5 @@
 
+
 import java.io.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,10 +20,10 @@ public class readFile {
 	static JTextField jfText;
 	static int counter = 0;
 	static Hashing lib=new Hashing();
-	static String library="Library.txt"
+	static String library="Library.txt";
 
 	public static void main(String[] args) {
-
+		readInFile();
 		printMenu();
 		int scan = in.nextInt();
 
@@ -41,10 +42,10 @@ public class readFile {
 	 * @param fileName The name of the file.
 	 * @return The ArrayList filled with music-objects.
 	 */
-	public static void readInFile() {
+	public static void readInFile(Hashing weed) {
 		try {
-			fileName=library;
-			Scanner read = new Scanner(new File(fileName));
+			
+			Scanner read = new Scanner(new File(library));
 			//ArrayList<Music> newList = new ArrayList<Music>();
 			
 			while (read.hasNext()) {
@@ -52,7 +53,7 @@ public class readFile {
 				String[] split = line.split(", ");
 				Music mus = new Music(split[0], split[1], Integer.parseInt(split[2]), split[3]);
 				//newList.add(mus);
-				lib.addInAll(mus);
+				weed.addInAll(mus);
 			}
 
 			read.close();
@@ -120,8 +121,8 @@ public class readFile {
 		}
 		case 2: {
 			System.out.println("Type in the name of the list:");
-			String read = in.next();
-			readInFile(read);
+			//String read = in.next();
+			readInFile();
 			break;
 		}
 		case 3: {
