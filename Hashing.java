@@ -10,74 +10,44 @@ import java.util.Comparator;
  */
 public class Hashing {
 
-	public Music[] HashBand;
-	public Music[] HashSong;
-	public Music[] HashTime;
+	public Music[] hashSong;
+	public int currentSize;
 	
 	public Hashing() {
-		HashBand=new Music[10000];
-		HashSong=new Music[10000];
-		HashTime=new Music[500];
+		hashSong = new Music[100];
+		currentSize = 0;
 	}
 	
+	public void add(Music song) {
+		doubleHashTabell();
+		int index = getIndex(song);
+		hashSong[index] = song;
+		
+	}
 	/**
-	 * Adds a music in all hashlists.
-	 * @param Song
+	 * Method that finds the object in the hashtabell.
 	 */
-	public void addInAll(Music Song) {
-		Song.printInfo();
-		addByBand(Song);
-		addBySong(Song);
-		//addByTime(Song);
-		
-	}
-	private void addByBand(Music Song) {
-		int index= 0;
-		String bandCode=Song.getBand();
-		for(int i=0;i<bandCode.length() ; i++) {
-			index+=(int)bandCode.charAt(i);
-		}
-		
-		//checks where to add, sorted manner.
-		if(HashBand[index]!=null) {
-			
-			while(HashBand[index].band.compareTo(Song.band)>0||HashBand[index]!=null) {
-				index++;
-			}
-		}
-		HashBand[index]= Song;
-		
-	}
-	private void addBySong(Music Song) {
-		int index= 0;
-		String Code=Song.getSong();
-		
-		for(int i=0;i<Code.length() ; i++) {
-			index+=(int)Code.charAt(i);
-		}
-		
-		if(HashSong[index]!=null) {
-			while(HashSong[index].song.compareTo(Song.song)>0||HashSong[index]!=null) {
-				index++;
-			}
-		}
-		HashBand[index]= Song;
-		
+	public Music getMusic(Music song) {
+		String a = obj.song;
 
-		
-		
+		int index = 0;
+		for (int i = 0; i < a.length(); i++) {
+			int letterValue = (int) a.charAt(i);
+			index += letterValue * 2 ^ (a.length() - i);
+		}
+
+		int indexValue = index % hashSong.length;
+
+		int n = 1;
+		int temp = indexValue;
+		while (hashSong[temp] != song) {
+			temp = indexValue + n ^ 2;
+			n++;
+			temp = temp % hashSong.length;
+		}
+
+		return hashSong[temp];
 	}
-	//gives nullpointer-exception.
-	private void addByTime(Music Song) {
-		int Code=(int)Song.playtime;
-		
-		while(HashTime[Code].playtime-Song.playtime!=0|| HashTime[Code]!=null)
-			Code++;
-		HashTime[Code]= Song;
-		
-		System.out.println("time");
-	}
-	
 	
 	/**
 	 * Returns a music array with the songs from a chosen band. 
@@ -153,7 +123,6 @@ public class Hashing {
 
 		while (hashSong[temp] != null) {
 			temp = indexValue + n ^ 2;
-			System.out.println(temp);
 			n++;
 			temp = temp % hashSong.length;
 		}
@@ -172,7 +141,7 @@ public class Hashing {
 	}
 	
 	public static boolean overLoad() {
-		return (currentSize+0.0)/(hashSong.length+0.0) > 0.5;
+		return (currentSize+1.0)/(hashSong.length+0.0) > 0.5;
 	}
 	
 }
