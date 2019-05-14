@@ -1,14 +1,6 @@
 
 import java.io.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -23,26 +15,28 @@ public class PlayList {
 	 */
 	public PlayList() {
 
-		JFrame frame = new JFrame("New Playlist");
+		//JFrame frame = new JFrame("New Playlist");
 
-		songs = new ArrayList<Music>();
+		//songs = new ArrayList<Music>();
 
-		JTextField textField = new JTextField("Please write a save file name.");
-		frame.getContentPane().add(textField);
+		// JTextField textField = new JTextField("Please write a save file name.");
+		// frame.getContentPane().add(textField);
 
-		playList = textField.getText();
+		// playList = textField.getText();
 
-		savePlayList(playList);
+		//savePlayList(playList);
 
 	}
 
-	public PlayList(String name) throws FileNotFoundException {
-
-		songs = new ArrayList<Music>();
-		playList = name;
-		// Loads a playlist.
-		loadPlayList(playList);
-
+	public PlayList(String name) {
+		try {
+			songs = new ArrayList<Music>();
+			playList = name;
+			// Loads a playlist.
+			loadPlayList(playList);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	public static void savePlayList(String name) {
@@ -73,6 +67,16 @@ public class PlayList {
 
 	}
 
+	public static void makeNewPlayList(String name) {
+		PrintWriter filout = null;
+
+		try {
+			filout = new PrintWriter(new BufferedWriter(new FileWriter(name + ".txt", false)));
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
 	public static void createPlaylist(Music[] hashlist) {
 		for (int i = 0; i < hashlist.length; i++) {
 			if (hashlist[i] != null) {
@@ -81,19 +85,23 @@ public class PlayList {
 		}
 	}
 
-	public static ArrayList<Music> loadPlayList(String name) throws FileNotFoundException {
-		@SuppressWarnings("resource")
-		Scanner reader = new Scanner(new FileReader(new File(name)));
+	public static ArrayList<Music> loadPlayList(String name) {
+		try {
+			Scanner reader = new Scanner(new FileReader(new File(name)));
+			songs = new ArrayList<Music>();
+			while (reader.hasNext()) {
+				String line = reader.nextLine();
+				String[] info = line.split(", ");
 
-		while (reader.hasNext()) {
-			String line = reader.nextLine();
-			String[] info = line.split(", ");
+				Music mus = new Music(info[0], info[1], Long.parseLong(info[2]), info[3]);
+				songs.add(mus);
 
-			Music mus = new Music(info[0], info[1], Long.parseLong(info[2]), info[3]);
-			songs.add(mus);
-
+			}
+			reader.close();
+			return songs;
+		} catch (Exception e) {
+			System.out.println(e);
 		}
-
 		return songs;
 	}
 
@@ -103,7 +111,7 @@ public class PlayList {
 	 * @param lib      what hash to get music file from.
 	 * @throws FileNotFoundException
 	 */
-	public static void addToPlayList(String SongName, Hashing lib) throws FileNotFoundException {
+	public static void addToPlayList(String SongName, Hashing lib) {
 		songs.add(lib.GetSong(SongName));
 
 		savePlayList(playList);
