@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +10,7 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -19,19 +21,20 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class musicPlayer extends JFrame implements ActionListener, KeyListener {
+public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 
 	private Clip musicFile = null;
 	private JFrame jf;
 	private JTextField jfText;
 	private int counter = 0;
+	public String getSong; // !!!!!!!!!! Kan returnera null om man väljer cancel på rutan
 
 	/**
 	 * Constructor
 	 */
-	public musicPlayer() {
-		super("musicPlayer");
-		setSize(300, 122);
+	public MusicPlayer() {
+		super("MusicPlayer");
+		setSize(300, 140);
 		setAlwaysOnTop(true);
 		jf = new JFrame("MusicPlayer");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,16 +47,76 @@ public class musicPlayer extends JFrame implements ActionListener, KeyListener {
 		jfText = new JTextField("Enter the name of your music file here.", 30);
 
 		// Knappar
-		JButton b1 = new JButton("Play");
-		JButton b2 = new JButton("Pause/Unpause");
-		JButton b3 = new JButton("Stop");
+		
+		// JButton b1 = new JButton("Play");
+		// JButton b2 = new JButton("Pause/Unpause");
+		// JButton b3 = new JButton("Stop");
+		JButton b1 = new JButton("");
+		JButton b2 = new JButton("");
+		JButton b3 = new JButton("");
 		getContentPane().add(jfText);
 
-		// Gör så knapparna reagerar på knapptryck
-		b1.addActionListener(this);
-		b2.addActionListener(this);
-		b3.addActionListener(this);
+		b1.setOpaque(false);
+		b1.setContentAreaFilled(false);
+		b1.setBorderPainted(false);
+
 		
+		b2.setOpaque(false);
+		b2.setContentAreaFilled(false);
+		b2.setBorderPainted(false);
+		
+		b3.setOpaque(false);
+		b3.setContentAreaFilled(false);
+		b3.setBorderPainted(false);
+
+		// b1.addActionListener(this);
+		// b2.addActionListener(this);
+		b1.setIcon(new ImageIcon("play.png"));
+		b2.setIcon(new ImageIcon("pause.png"));
+		b3.setIcon(new ImageIcon("stop.png"));
+
+		// Gör så knapparna reagerar på knapptryck
+		b1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				counter = 0;
+				playSound(jfText.getText() + ".wav");
+				jfText.setText(jfText.getText());
+			}
+		});
+
+		b2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (musicFile == null) {
+					JOptionPane.showMessageDialog(jf, "No Audio-file loaded.");
+				} else {
+					counter++;
+					long saveClipTime = musicFile.getMicrosecondPosition();
+					if (counter % 2 == 0) {
+						musicFile.setMicrosecondPosition(saveClipTime);
+						musicFile.start();
+					} else {
+						musicFile.stop();
+					}
+				}
+			}
+		});
+		b3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				counter = 1;
+				if (musicFile == null) {
+					JOptionPane.showMessageDialog(jf, "No Audio-file loaded.");
+				} else {
+					if (!musicFile.isRunning()) {
+						JOptionPane.showMessageDialog(jf, "No Audio running.");
+					} else {
+						musicFile.stop();
+						musicFile = null;
+					}
+				}
+			}
+		});
+		b2.addActionListener(this);
+
 		// Används endast när vi trycker ENTER för att starta en låt.
 		jfText.addKeyListener(this);
 
@@ -65,17 +128,24 @@ public class musicPlayer extends JFrame implements ActionListener, KeyListener {
 		// Menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu m = new JMenu("File");
+		JMenu m3 = new JMenu("Sort Playlist");
 		JMenu m2 = new JMenu("Help");
 		menuBar.add(m);
+		menuBar.add(m3);
 		menuBar.add(m2);
 		JMenuItem item1 = new JMenuItem("Open Sound");
+		JMenuItem item4 = new JMenuItem("Band");
+		JMenuItem item5 = new JMenuItem("Song");
 		JMenuItem item2 = new JMenuItem("Exit");
 		JMenuItem item3 = new JMenuItem("About");
 		m.add(item1).addActionListener(this);
 		m.add(item2).addActionListener(this);
+		m3.add(item4).addActionListener(this);
+		m3.add(item5).addActionListener(this);
 		m2.add(item3).addActionListener(this);
 		setJMenuBar(menuBar);
-		//pack();   //Allt på samma rad, ser också till att allt du lagt till kommer med i rutan!!
+		// pack(); // Allt på samma rad, ser också till att allt du lagt till kommer med
+		// i rutan!!
 	}
 
 	/**
@@ -85,10 +155,12 @@ public class musicPlayer extends JFrame implements ActionListener, KeyListener {
 	 */
 	public void playSound(String file) {
 		try {
-			AudioInputStream audio = AudioSystem.getAudioInputStream(new File(file));
-			musicFile = AudioSystem.getClip();
-			musicFile.open(audio);
-			musicFile.start();
+			if (musicFile == null) { // Om du ändrar här, så måste du ändra på ActionPerformed med STOP
+				AudioInputStream audio = AudioSystem.getAudioInputStream(new File(file));
+				musicFile = AudioSystem.getClip();
+				musicFile.open(audio);
+				musicFile.start();
+			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -122,21 +194,22 @@ public class musicPlayer extends JFrame implements ActionListener, KeyListener {
 		} else if (e.getActionCommand() == "Stop") {
 			counter = 1;
 			if (musicFile == null) {
-				JOptionPane.showMessageDialog(jf, "No Audio-file loaded.");
+				JOptionPane.showMessageDialog(this, "No Audio-file loaded.");
 			} else {
 				if (!musicFile.isRunning()) {
-					JOptionPane.showMessageDialog(jf, "No Audio running.");
+					JOptionPane.showMessageDialog(this, "No Audio running.");
 				} else {
 					musicFile.stop();
-					musicFile = null;	// ELLER använd musicFile.close() , detta ändrar hur vi använder oss av Pause/Unpause. (Om en stoppad fil ska kunna startas igen eller ej!)
-					
+					musicFile = null; // ELLER använd musicFile.close() , detta ändrar hur vi använder oss av
+										// Pause/Unpause. (Om en stoppad fil ska kunna startas igen eller ej!)
+
 				}
 			}
 		} else if (e.getActionCommand() == "Open Sound") {
 			openSound();
 		} else if (e.getActionCommand() == "Pause/Unpause") {
 			if (musicFile == null) {
-				JOptionPane.showMessageDialog(jf, "No Audio-file loaded.");
+				JOptionPane.showMessageDialog(this, "No Audio-file loaded.");
 			} else {
 				counter++;
 				long saveClipTime = musicFile.getMicrosecondPosition();
@@ -147,10 +220,26 @@ public class musicPlayer extends JFrame implements ActionListener, KeyListener {
 					musicFile.stop();
 				}
 			}
-
+		} else if (e.getActionCommand() == "Band") {
+			System.out.println();
+			System.out.println("Nu");
+			System.out.println("Sorterar");
+			System.out.println("Vi");
+			System.out.println("GRABBAR!!");
+		} else if (e.getActionCommand() == "Song") {
+			getSong = "";
+			while (getSong.equals("")) {
+				
+				getSong = JOptionPane.showInputDialog(this, "Enter Song name:", "Enter Song name",
+						JOptionPane.PLAIN_MESSAGE);
+				if (getSong == null) {
+					break;
+				}
+				System.out.println(getSong);
+			}
 		} else if (e.getActionCommand() == "About") {
 			playSound("victory.wav");
-			JOptionPane.showMessageDialog(jf, "MADE BY THE AMAZING TEAM!!!");
+			JOptionPane.showMessageDialog(this, "MADE BY THE AMAZING TEAM!!!");
 		} else if (e.getActionCommand() == "Exit") {
 			System.exit(0);
 		}
