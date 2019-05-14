@@ -1,4 +1,3 @@
-package muplay;
 
 
 import java.io.*;
