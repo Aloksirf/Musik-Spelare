@@ -1,10 +1,13 @@
-
-public class Main {
+package muplay;
+public class MainFile {
+	
 	public static void main(String[] args) {
-		readFile.readInFile("Library.txt");
+		Hashing Library=new Hashing();
+		readFile.readInFile(Library);
 		MusicPlayer m = new MusicPlayer();
 		m.setVisible(true);
 
+		
 	}
 
 }

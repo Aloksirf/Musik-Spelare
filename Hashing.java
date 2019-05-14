@@ -1,5 +1,4 @@
-﻿package muplay;
-
+﻿
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -11,14 +10,14 @@ import java.util.Comparator;
  */
 public class Hashing {
 
-	public ArrayList<Music> HashBand;
-	public ArrayList<Music> HashSong;
-	public ArrayList<Music> HashTime;
+	public Music[] HashBand;
+	public Music[] HashSong;
+	public Music[] HashTime;
 	
 	public Hashing() {
-		HashBand=null; 
-		HashSong=null;
-		HashTime=null;
+		HashBand=new Music[10000];
+		HashSong=new Music[10000];
+		HashTime=new Music[500];
 	}
 	
 	/**
@@ -26,9 +25,10 @@ public class Hashing {
 	 * @param Song
 	 */
 	public void addInAll(Music Song) {
+		Song.printInfo();
 		addByBand(Song);
 		addBySong(Song);
-		addByTime(Song);
+		//addByTime(Song);
 		
 	}
 	private void addByBand(Music Song) {
@@ -37,40 +37,45 @@ public class Hashing {
 		for(int i=0;i<bandCode.length() ; i++) {
 			index+=(int)bandCode.charAt(i);
 		}
+		
 		//checks where to add, sorted manner.
-		if(HashBand.get(index)!=null) {
-			while(HashBand.get(index).band.compareTo(Song.band)>0||HashBand.get(index)!=null) {
+		if(HashBand[index]!=null) {
+			
+			while(HashBand[index].band.compareTo(Song.band)>0||HashBand[index]!=null) {
 				index++;
 			}
 		}
-		HashBand.add(index, Song);
+		HashBand[index]= Song;
+		
 	}
 	private void addBySong(Music Song) {
 		int index= 0;
 		String Code=Song.getSong();
+		
 		for(int i=0;i<Code.length() ; i++) {
 			index+=(int)Code.charAt(i);
 		}
 		
-		if(HashSong.get(index)!=null) {
-			while(HashSong.get(index).song.compareTo(Song.song)>0||HashSong.get(index)!=null) {
+		if(HashSong[index]!=null) {
+			while(HashSong[index].song.compareTo(Song.song)>0||HashSong[index]!=null) {
 				index++;
 			}
 		}
-		HashBand.add(index, Song);
-
+		HashBand[index]= Song;
+		
 
 		
 		
 	}
+	//gives nullpointer-exception.
 	private void addByTime(Music Song) {
 		int Code=(int)Song.playtime;
 		
-		while(HashTime.get(Code).playtime-Song.playtime!=0|| HashTime.get(Code)!=null)
+		while(HashTime[Code].playtime-Song.playtime!=0|| HashTime[Code]!=null)
 			Code++;
-		HashTime.add(Code, Song);
+		HashTime[Code]= Song;
 		
-		
+		System.out.println("time");
 	}
 	
 	
@@ -86,11 +91,11 @@ public class Hashing {
 		for(int i=0;i<Code.length() ; i++) {
 			index+=(int)Code.charAt(i);
 		}
-		while(HashBand.get(index).band.compareTo(Name)!=0) {
+		while(HashBand[index].band.compareTo(Name)!=0) {
 			index++;
 		}
-		for(int i=0;HashBand.get(index+i).band.compareTo(Name)==0;i++) {
-			Array[i]=HashBand.get(index+i);
+		for(int i=0;HashBand[index+i].band.compareTo(Name)==0;i++) {
+			Array[i]=HashBand[index+i];
 		}
 		return Array;
 	}
@@ -105,10 +110,10 @@ public class Hashing {
 		for(int i=0;i<Code.length() ; i++) {
 			index+=(int)Code.charAt(i);
 		}
-		while(HashSong.get(index).song.compareTo(Name)!=0) {
+		while(HashSong[index].song.compareTo(Name)!=0) {
 			index++;
 		}
-		return HashBand.get(index);
+		return HashBand[index];
 	}
 	
 	
@@ -121,11 +126,11 @@ public class Hashing {
 		  int index= (int)time;
 		Music[] Array=new Music[40];
 
-		while(HashTime.get(index).playtime-time!=0) {
+		while(HashTime[index].playtime-time!=0) {
 			index++;
 		}
-		for(int i=0;HashTime.get(index+i).playtime-time==0; i++) {
-			Array[i]=HashTime.get(index+i);
+		for(int i=0;HashTime[index+i].playtime-time==0; i++) {
+			Array[i]=HashTime[index+i];
 		}
 		
 		return Array;
