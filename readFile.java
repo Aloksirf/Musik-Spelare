@@ -19,6 +19,7 @@ public class readFile {
 	static JTextField jfText;
 	static int counter = 0;
 	static Hashing lib=new Hashing();
+	static String library="Library.txt"
 
 	public static void main(String[] args) {
 
@@ -40,8 +41,9 @@ public class readFile {
 	 * @param fileName The name of the file.
 	 * @return The ArrayList filled with music-objects.
 	 */
-	public static void readInFile(String fileName) {
+	public static void readInFile() {
 		try {
+			fileName=library;
 			Scanner read = new Scanner(new File(fileName));
 			//ArrayList<Music> newList = new ArrayList<Music>();
 			
@@ -104,7 +106,6 @@ public class readFile {
 		System.out.println("2. Get a list");
 		System.out.println("3. Start MusicPlayer");
 		System.out.println("4. Exit");
-		System.out.println("5. Load Library");
 		System.out.print("\nEnter your choice: ");
 	}
 
@@ -132,9 +133,6 @@ public class readFile {
 		case 4: {
 			System.exit(0);
 			break;
-		}
-		case 5: {
-			readInFile("list.txt");
 		}
 		}
 	}
