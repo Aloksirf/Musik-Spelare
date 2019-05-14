@@ -22,6 +22,7 @@ public class Hashing {
 		doubleHashTabell();
 		int index = getIndex(song);
 		hashSong[index] = song;
+		currentSize++;
 		
 	}
 	/**
