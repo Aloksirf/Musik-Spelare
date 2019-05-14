@@ -1,4 +1,3 @@
-package muplay;
 import java.io.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class PlayList {
@@ -81,12 +81,12 @@ public class PlayList {
 	 * @param pref     User input on how the list will be sorted.
 	 * @return sortedList The sorted list.
 	 */
-	public void sortList(String pref) {
+	public static void sortList(String pref) {
 
 		if (pref.equals("band")) {
 			Collections.sort(songs, new BandComparator());
 		} else if (pref.equals("song")) {
-			Collections.sort(songs, new SongComparator());
+			Collections.sort(songs, new SongComparator()); 
 		} else if (pref.equals("playtime")) {
 			Collections.sort(songs, new PlaytimeComparator());
 		} else if (pref.equals("filecode")) {
