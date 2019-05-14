@@ -27,7 +27,7 @@ public class Hashing {
 	/**
 	 * Method that finds the object in the hashtabell.
 	 */
-	public Music getMusic(Music song) {
+	public Music getMusic(Music obj) {
 		String a = obj.song;
 
 		int index = 0;
