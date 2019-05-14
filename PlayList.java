@@ -112,7 +112,7 @@ public class PlayList {
 	 * @throws FileNotFoundException
 	 */
 	public static void addToPlayList(String SongName, Hashing lib) {
-		songs.add(lib.GetSong(SongName));
+		songs.add(lib.getSong(SongName));
 
 		savePlayList(playList);
 		loadPlayList(playList);
