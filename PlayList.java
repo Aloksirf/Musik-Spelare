@@ -54,7 +54,7 @@ public class PlayList {
 	}	
 	public static ArrayList<Music> loadPlayList(String name) throws FileNotFoundException {
 		@SuppressWarnings("resource")
-		Scanner reader= new Scanner(new FileReader(new File(name+".txt")));
+		Scanner reader= new Scanner(new FileReader(new File(name)));
 		
 		while(reader.hasNext()) {
 			String line=reader.nextLine();
