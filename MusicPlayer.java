@@ -27,14 +27,14 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 	private JFrame jf;
 	private JTextField jfText;
 	private int counter = 0;
-	public String getSong; // !!!!!!!!!! Kan returnera null om man väljer cancel på rutan
+	public String getSong;
+	public String getPlayList;
 
 	/**
 	 * Constructor
 	 */
 	public MusicPlayer() {
 		super("MusicPlayer");
-		setSize(300, 140);
 		setAlwaysOnTop(true);
 		jf = new JFrame("MusicPlayer");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,10 +47,6 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		jfText = new JTextField("Enter the name of your music file here.", 30);
 
 		// Knappar
-
-		// JButton b1 = new JButton("Play");
-		// JButton b2 = new JButton("Pause/Unpause");
-		// JButton b3 = new JButton("Stop");
 		JButton b1 = new JButton("");
 		JButton b2 = new JButton("");
 		JButton b3 = new JButton("");
@@ -68,11 +64,9 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		b3.setContentAreaFilled(false);
 		b3.setBorderPainted(false);
 
-		// b1.addActionListener(this);
-		// b2.addActionListener(this);
-		b1.setIcon(new ImageIcon("play.png"));
-		b2.setIcon(new ImageIcon("pause.png"));
-		b3.setIcon(new ImageIcon("stop.png"));
+		b1.setIcon(new ImageIcon("Images/play.png"));
+		b2.setIcon(new ImageIcon("Images/pause.png"));
+		b3.setIcon(new ImageIcon("Images/stop.png"));
 
 		// Gör så knapparna reagerar på knapptryck
 		b1.addActionListener(new ActionListener() {
@@ -127,30 +121,40 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		// Menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu m = new JMenu("File");
-		JMenu m3 = new JMenu("Sort Playlist");
 		JMenu m2 = new JMenu("Help");
+		JMenu m3 = new JMenu("Playlist");
+		JMenu m4 = new JMenu("Sort by");
+		
+		m4.setIcon(new ImageIcon("Images/sort.png"));
+
 		menuBar.add(m);
 		menuBar.add(m3);
 		menuBar.add(m2);
-		JMenuItem item1 = new JMenuItem("Open Sound");
-		JMenuItem item4 = new JMenuItem("Band");
-		JMenuItem item5 = new JMenuItem("Song");
-		JMenuItem item6 = new JMenuItem("Playtime");
-		JMenuItem item7 = new JMenuItem("Filecode");
-		JMenuItem item2 = new JMenuItem("Exit");
-		JMenuItem item3 = new JMenuItem("About");
+
+		JMenuItem item1 = new JMenuItem("Open Sound", new ImageIcon("Images/openfile.png"));
+		JMenuItem item8 = new JMenuItem("Open", new ImageIcon("Images/openfile.png"));
+		JMenuItem item4 = new JMenuItem("Band", new ImageIcon("Images/group.png"));
+		JMenuItem item5 = new JMenuItem("Song", new ImageIcon("Images/song.png"));
+		JMenuItem item6 = new JMenuItem("Playtime", new ImageIcon("Images/time.png"));
+		JMenuItem item7 = new JMenuItem("Filecode", new ImageIcon("Images/code.png"));
+		JMenuItem item2 = new JMenuItem("Exit", new ImageIcon("Images/exit.png"));
+		JMenuItem item3 = new JMenuItem("About", new ImageIcon("Images/about.png"));
 
 		m.add(item1).addActionListener(this);
 		m.add(item2).addActionListener(this);
 
-		m3.add(item4).addActionListener(this);
-		m3.add(item5).addActionListener(this);
-		m3.add(item6).addActionListener(this);
-		m3.add(item7).addActionListener(this);
-
 		m2.add(item3).addActionListener(this);
+
+		m3.add(item8).addActionListener(this);
+		m3.add(m4);
+
+		m4.add(item4).addActionListener(this);
+		m4.add(item5).addActionListener(this);
+		m4.add(item6).addActionListener(this);
+		m4.add(item7).addActionListener(this);
+
 		setJMenuBar(menuBar);
-		// pack(); // Allt på samma rad, ser också till att allt du lagt till kommer med
+		pack(); // Allt på samma rad, ser också till att allt du lagt till kommer med
 		// i rutan!!
 	}
 
@@ -191,60 +195,42 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		}
 	}
 
+	public void openPlayList() {
+		JFileChooser choice = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("txt", "TXT");
+		choice.setFileFilter(filter);
+		choice.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		int result = choice.showOpenDialog(jfText);
+
+		if (result == JFileChooser.APPROVE_OPTION) {
+			try {
+				File selectedFile = choice.getSelectedFile();
+				String listName = selectedFile.getName();
+				PlayList.loadPlayList(listName);
+			} catch(Exception e) {
+				System.out.println(e);
+			}
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand() == "Play") {
-			counter = 0;
-			playSound(jfText.getText() + ".wav");
-			jfText.setText(jfText.getText());
-		} else if (e.getActionCommand() == "Stop") {
-			counter = 1;
-			if (musicFile == null) {
-				JOptionPane.showMessageDialog(this, "No Audio-file loaded.");
-			} else {
-				if (!musicFile.isRunning()) {
-					JOptionPane.showMessageDialog(this, "No Audio running.");
-				} else {
-					musicFile.stop();
-					musicFile = null; // ELLER använd musicFile.close() , detta ändrar hur vi använder oss av
-										// Pause/Unpause. (Om en stoppad fil ska kunna startas igen eller ej!)
-				}
-			}
-		} else if (e.getActionCommand() == "Open Sound") {
+		if (e.getActionCommand() == "Open Sound") {
 			openSound();
-		} else if (e.getActionCommand() == "Pause/Unpause") {
-			if (musicFile == null) {
-				JOptionPane.showMessageDialog(this, "No Audio-file loaded.");
-			} else {
-				counter++;
-				long saveClipTime = musicFile.getMicrosecondPosition();
-				if (counter % 2 == 0) {
-					musicFile.setMicrosecondPosition(saveClipTime);
-					musicFile.start();
-				} else {
-					musicFile.stop();
-				}
-			}
 		} else if (e.getActionCommand() == "Band") {
 			PlayList.sortList("band");
 			PlayList.printPlayList();
+		} else if (e.getActionCommand() == "Open") {
+			openPlayList();
 		} else if (e.getActionCommand() == "Playtime") {
 			PlayList.sortList("playtime");
 			PlayList.printPlayList();
 		} else if (e.getActionCommand() == "Filecode") {
 			PlayList.sortList("filecode");
 			PlayList.printPlayList();
-		}else if (e.getActionCommand() == "Song") {
-			getSong = "";
-			while (getSong.equals("")) {
-				getSong = JOptionPane.showInputDialog(this, "Enter Song name:", "Enter Song name",
-						JOptionPane.PLAIN_MESSAGE);
-				if (getSong == null) {
-					break;
-				}
-				PlayList.sortList(getSong);
-				PlayList.printPlayList();
-			}
+		} else if (e.getActionCommand() == "Song") {
+			PlayList.sortList("song");
+			PlayList.printPlayList();
 		} else if (e.getActionCommand() == "About") {
 			playSound("victory.wav");
 			JOptionPane.showMessageDialog(this, "MADE BY THE AMAZING TEAM!!!");
@@ -273,5 +259,4 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 	public void keyReleased(KeyEvent e) {
 
 	}
-
 }
