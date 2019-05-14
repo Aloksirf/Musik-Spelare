@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class PlayList {
 
-	static ArrayList<Music> Songs=new ArrayList<Music>();
+	static ArrayList<Music> songs=new ArrayList<Music>();
 	static String playList="";
 	
 	public static void savePlayList( String name) {
@@ -22,7 +22,7 @@ public class PlayList {
 		filout=new PrintWriter(new BufferedWriter(new FileWriter(name+".txt", false)));
 		String output = "";
 		@SuppressWarnings("unchecked")
-		ArrayList<Music> CopySongs = (ArrayList<Music>) Songs.clone();
+		ArrayList<Music> CopySongs = (ArrayList<Music>) songs.clone();
 		while(!CopySongs.isEmpty()) {
 			output = CopySongs.get(0).band+ ", " +CopySongs.get(0).song+ ", " + CopySongs.get(0).playtime + ", "+ CopySongs.get(0).fileCode;
 			CopySongs.remove(0);
@@ -54,27 +54,42 @@ public class PlayList {
 			String[] info=line.split(", ");
 			
 			Music mus=new Music(info[0],info[1],Long.parseLong(info[2]),info[3] );
-			Songs.add(mus);
+			songs.add(mus);
 			
 			
 		}
 		
-		return Songs;
+		return songs;
 	}
 	public void addToPlayList(String SongName, Hashing lib) throws FileNotFoundException {
-		Songs.add(lib.GetSong(SongName));
+		songs.add(lib.GetSong(SongName));
 		
 		savePlayList(playList);
 		loadPlayList(playList);
 		
 	}
-	public Music[] sortPlayList() {
-		return null;
-		
+	/**
+	 * Method that sorts a list according to the users input.
+	 * 
+	 * @param pref     User input on how the list will be sorted.
+	 * @return sortedList The sorted list.
+	 */
+	public void sortList(String pref) {
+
+		if (pref.equals("band")) {
+			Collections.sort(songs, new BandComparator());
+		} else if (pref.equals("song")) {
+			Collections.sort(songs, new SongComparator());
+		} else if (pref.equals("playtime")) {
+			Collections.sort(songs, new PlaytimeComparator());
+		} else if (pref.equals("filecode")) {
+			Collections.sort(songs, new FilecodeComparator());
+		}		
 	}
+	
 	public static void printPlayList() {
-		for(int i =0; i<Songs.size();i++)
-		Songs.get(i).printInfo();
+		for(int i =0; i<songs.size();i++)
+		songs.get(i).printInfo();
 	}
 	/*public static void main(String[] args) {
 		
