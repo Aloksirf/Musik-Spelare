@@ -1,3 +1,4 @@
+package muplay;
 
 
 import java.io.*;
@@ -22,7 +23,7 @@ public class readFile {
 	static Hashing lib=new Hashing();
 	static String library="Library.txt";
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		readInFile();
 		printMenu();
 		int scan = in.nextInt();
@@ -34,7 +35,7 @@ public class readFile {
 			in.nextLine();
 		}
 
-	}
+	}*/
 
 	/**
 	 * Reads in a file and creates new music objects to an ArrayList
@@ -71,6 +72,7 @@ public class readFile {
 	 * 
 	 * @param listName the name of the list.
 	 */
+	/*
 	public static void addSong(String listName) {
 		try {
 			String total = "";
@@ -96,11 +98,12 @@ public class readFile {
 			System.out.println(e);
 		}
 		return;
-	}
+	}*/
 
 	/**
 	 * Prints the menu.
 	 */
+	/*
 	public static void printMenu() {
 		System.out.println("What would you like to do? ");
 		System.out.println("1. Add a new Song to a list");
@@ -109,7 +112,8 @@ public class readFile {
 		System.out.println("4. Exit");
 		System.out.print("\nEnter your choice: ");
 	}
-
+*/
+	/*
 	public static void choices(int scan) {
 		switch (scan) {
 
@@ -136,6 +140,6 @@ public class readFile {
 			break;
 		}
 		}
-	}
+	}*/
 
 }
