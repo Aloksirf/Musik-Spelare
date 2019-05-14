@@ -135,12 +135,19 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		JMenuItem item1 = new JMenuItem("Open Sound");
 		JMenuItem item4 = new JMenuItem("Band");
 		JMenuItem item5 = new JMenuItem("Song");
+		JMenuItem item6 = new JMenuItem("Playtime");
+		JMenuItem item7 = new JMenuItem("Filecode");
 		JMenuItem item2 = new JMenuItem("Exit");
 		JMenuItem item3 = new JMenuItem("About");
+
 		m.add(item1).addActionListener(this);
 		m.add(item2).addActionListener(this);
+
 		m3.add(item4).addActionListener(this);
 		m3.add(item5).addActionListener(this);
+		m3.add(item6).addActionListener(this);
+		m3.add(item7).addActionListener(this);
+
 		m2.add(item3).addActionListener(this);
 		setJMenuBar(menuBar);
 		// pack(); // Allt på samma rad, ser också till att allt du lagt till kommer med
@@ -219,28 +226,31 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 				}
 			}
 		} else if (e.getActionCommand() == "Band") {
-			System.out.println();
-			System.out.println("Nu");
-			System.out.println("Sorterar");
-			System.out.println("Vi");
-			System.out.println("GRABBAR!!");
-		} else if (e.getActionCommand() == "Song") {
+			PlayList.sortList("band");
+			PlayList.printPlayList();
+		} else if (e.getActionCommand() == "Playtime") {
+			PlayList.sortList("playtime");
+			PlayList.printPlayList();
+		} else if (e.getActionCommand() == "Filecode") {
+			PlayList.sortList("filecode");
+			PlayList.printPlayList();
+		}else if (e.getActionCommand() == "Song") {
 			getSong = "";
 			while (getSong.equals("")) {
-				
 				getSong = JOptionPane.showInputDialog(this, "Enter Song name:", "Enter Song name",
 						JOptionPane.PLAIN_MESSAGE);
 				if (getSong == null) {
 					break;
 				}
-				System.out.println(getSong);
+				PlayList.sortList(getSong);
+				PlayList.printPlayList();
 			}
 		} else if (e.getActionCommand() == "About") {
 			playSound("victory.wav");
 			JOptionPane.showMessageDialog(this, "MADE BY THE AMAZING TEAM!!!");
 		} else if (e.getActionCommand() == "Exit") {
 			int option = JOptionPane.showConfirmDialog(this, "Do you really want to exit?");
-			if (option == 0) {	//Om option är "Ja"
+			if (option == 0) { // Om option är "Ja"
 				System.exit(0);
 			}
 		}
