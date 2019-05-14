@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
@@ -92,7 +93,6 @@ public class PlayList {
 			songs.add(mus);
 
 		}
-		printPlayList();
 
 		return songs;
 	}
@@ -103,7 +103,7 @@ public class PlayList {
 	 * @param lib      what hash to get music file from.
 	 * @throws FileNotFoundException
 	 */
-	public void addToPlayList(String SongName, Hashing lib) throws FileNotFoundException {
+	public static void addToPlayList(String SongName, Hashing lib) throws FileNotFoundException {
 		songs.add(lib.GetSong(SongName));
 
 		savePlayList(playList);
@@ -117,7 +117,7 @@ public class PlayList {
 	 * @param pref User input on how the list will be sorted.
 	 * @return sortedList The sorted list.
 	 */
-	public void sortList(String pref) {
+	public static void sortList(String pref) {
 
 		if (pref.equals("band")) {
 			Collections.sort(songs, new BandComparator());
@@ -131,26 +131,8 @@ public class PlayList {
 	}
 
 	public static void printPlayList() {
-		final Object[][] table = new String[songs.size()][];
-		for (int i = 0; i < songs.size(); i++) {
-			table[i] = new String[] { songs.get(i).band, songs.get(i).song, songs.get(i).playtime + "s" };
-
-		}
-		for (final Object[] row : table) {
-			System.out.format("%-15s%-15s%-15s\n", row);
-		}
-		System.out.println();
+		for (int i = 0; i < songs.size(); i++)
+			songs.get(i).printInfo();
 	}
-	/*
-	 * public static void main(String[] args) {
-	 * 
-	 * try { ArrayList<Music> test=loadPlayList("list"); savePlayList("test");
-	 * printPlayList(); } catch (FileNotFoundException e) { // TODO Auto-generated
-	 * catch block e.printStackTrace(); }
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
 
 }
