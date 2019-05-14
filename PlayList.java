@@ -45,6 +45,13 @@ public class PlayList {
 		
 		
 	}
+	public static void createPlaylist(Music[] hashlist){
+		for(int i = 0; i < hashlist.length; i++){
+			if(hashlist[i] != null){
+				songs.add(hashlist[i]);
+			}
+		}
+	}	
 	public static ArrayList<Music> loadPlayList(String name) throws FileNotFoundException {
 		@SuppressWarnings("resource")
 		Scanner reader= new Scanner(new FileReader(new File(name+".txt")));
