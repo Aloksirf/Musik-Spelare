@@ -135,6 +135,44 @@ public class Hashing {
 		
 		return Array;
 	}
+	
+	public static int getIndex(Music obj) {
+		String a = obj.song;
 
+		int index = 0;
+		for (int i = 0; i < a.length(); i++) {
+			int letterValue = (int) a.charAt(i);
+			index += letterValue * 2 ^ (a.length() - i);
+		}
+
+		int indexValue = index % hashSong.length;
+
+		int n = 1;
+
+		int temp = indexValue;
+
+		while (hashSong[temp] != null) {
+			temp = indexValue + n ^ 2;
+			System.out.println(temp);
+			n++;
+			temp = temp % hashSong.length;
+		}
+
+		return temp;
+	}
+	
+	public static void doubleHashtabell() {
+		if(overLoad()) {
+			String[] temp = new String[hashSong.length*2];
+			for(int i = 0; i < hashSong.length; i++) {
+				temp[i] = hashSong[i];
+			}
+			hashSong = temp;
+		}		
+	}
+	
+	public static boolean overLoad() {
+		return (currentSize+0.0)/(hashSong.length+0.0) > 0.5;
+	}
 	
 }
