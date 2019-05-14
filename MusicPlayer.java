@@ -30,9 +30,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 	public String getSong;
 	public String getPlayList;
 
-	/**
-	 * Constructor
-	 */
+	/** Constructor */
 	public MusicPlayer() {
 		super("MusicPlayer");
 		setAlwaysOnTop(true);
@@ -121,10 +119,11 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		// Menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu m = new JMenu("File");
-		JMenu m2 = new JMenu("Help");
 		JMenu m3 = new JMenu("Playlist");
+		JMenu m2 = new JMenu("Help");
+
 		JMenu m4 = new JMenu("Sort by");
-		
+
 		m4.setIcon(new ImageIcon("Images/sort.png"));
 
 		menuBar.add(m);
@@ -139,13 +138,17 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		JMenuItem item7 = new JMenuItem("Filecode", new ImageIcon("Images/code.png"));
 		JMenuItem item2 = new JMenuItem("Exit", new ImageIcon("Images/exit.png"));
 		JMenuItem item3 = new JMenuItem("About", new ImageIcon("Images/about.png"));
+		JMenuItem item9 = new JMenuItem("New", new ImageIcon("Images/newfile.png"));
+		JMenuItem item10 = new JMenuItem("Add Song", new ImageIcon("Images/newfile.png"));
 
 		m.add(item1).addActionListener(this);
 		m.add(item2).addActionListener(this);
 
 		m2.add(item3).addActionListener(this);
 
+		m3.add(item9).addActionListener(this);
 		m3.add(item8).addActionListener(this);
+		m3.add(item10).addActionListener(this);
 		m3.add(m4);
 
 		m4.add(item4).addActionListener(this);
@@ -165,7 +168,8 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 	 */
 	public void playSound(String file) {
 		try {
-			if (musicFile == null) { // Om du ändrar här, så måste du ändra på ActionPerformed med STOP
+			if (musicFile == null || !musicFile.isRunning()) { // Om du ändrar här, så måste du ändra på ActionPerformed
+																// med STOP
 				AudioInputStream audio = AudioSystem.getAudioInputStream(new File(file));
 				musicFile = AudioSystem.getClip();
 				musicFile.open(audio);
@@ -206,8 +210,13 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			try {
 				File selectedFile = choice.getSelectedFile();
 				String listName = selectedFile.getName();
+				getPlayList = listName;
+				System.out.println();
+				System.out.println();
+				System.out.println("------- Successfully loaded playlist: " + listName + " -------");
 				PlayList.loadPlayList(listName);
-			} catch(Exception e) {
+				PlayList.printPlayList();
+			} catch (Exception e) {
 				System.out.println(e);
 			}
 		}
@@ -218,22 +227,36 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		if (e.getActionCommand() == "Open Sound") {
 			openSound();
 		} else if (e.getActionCommand() == "Band") {
+			System.out.println();
+			System.out.println("------- Sorted by Band -------");
 			PlayList.sortList("band");
 			PlayList.printPlayList();
 		} else if (e.getActionCommand() == "Open") {
 			openPlayList();
 		} else if (e.getActionCommand() == "Playtime") {
+			System.out.println();
+			System.out.println("------- Sorted by Playtime -------");
 			PlayList.sortList("playtime");
 			PlayList.printPlayList();
 		} else if (e.getActionCommand() == "Filecode") {
+			System.out.println();
+			System.out.println("------- Sorted by Filecode -------");
 			PlayList.sortList("filecode");
 			PlayList.printPlayList();
 		} else if (e.getActionCommand() == "Song") {
+			System.out.println();
+			System.out.println("------- Sorted by Song -------");
 			PlayList.sortList("song");
 			PlayList.printPlayList();
 		} else if (e.getActionCommand() == "About") {
 			playSound("victory.wav");
 			JOptionPane.showMessageDialog(this, "MADE BY THE AMAZING TEAM!!!");
+		} else if (e.getActionCommand() == "New") {
+			PlayList.sortList("band");
+			PlayList.printPlayList();
+		} else if (e.getActionCommand() == "Add Song") {
+			PlayList.sortList("band");
+			PlayList.printPlayList();
 		} else if (e.getActionCommand() == "Exit") {
 			int option = JOptionPane.showConfirmDialog(this, "Do you really want to exit?");
 			if (option == 0) { // Om option är "Ja"
