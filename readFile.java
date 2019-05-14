@@ -1,135 +1,142 @@
 
+import java.io.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import javax.swing.JOptionPane;
+import javax.sound.sampled.*;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.util.*;
 
-/**
- * är en konstruktor som lagrar musikfiler i en hashlista.
- * @author Master booom
- *
- * @param <Music>
- */
-public class Hashing {
+public class readFile {
+	static Scanner in = new Scanner(System.in);
+	static PrintWriter write = null;
+	static Clip musicFile = null;
+	static JTextField jfText;
+	static int counter = 0;
+	static Hashing lib=new Hashing();
 
-	public ArrayList<Music> HashBand;
-	public ArrayList<Music> HashSong;
-	public ArrayList<Music> HashTime;
-	
-	public Hashing() {
-		HashBand=null;
-		HashSong=null;
-		HashTime=null;
-	}
-	
-	/**
-	 * Adds a music in all hashlists.
-	 * @param Song
-	 */
-	public void addInAll(Music Song) {
-		addByBand(Song);
-		addBySong(Song);
-		addByTime(Song);
-		
-	}
-	private void addByBand(Music Song) {
-		int index= 0;
-		String bandCode=Song.getBand();
-		for(int i=0;i<bandCode.length() ; i++) {
-			index+=(int)bandCode.charAt(i);
+	public static void main(String[] args) {
+
+		printMenu();
+		int scan = in.nextInt();
+
+		while (scan != 4) {
+			choices(scan);
+			printMenu();
+			scan = in.nextInt();
+			in.nextLine();
 		}
-		//checks where to add, sorted manner.
-		if(HashBand.get(index)!=null) {
-			while(HashBand.get(index).band.compareTo(Song.band)>0||HashBand.get(index)!=null) {
-				index++;
+
+	}
+
+	/**
+	 * Reads in a file and creates new music objects to an ArrayList
+	 * 
+	 * @param fileName The name of the file.
+	 * @return The ArrayList filled with music-objects.
+	 */
+	public static void readInFile(String fileName) {
+		try {
+			Scanner read = new Scanner(new File(fileName));
+			//ArrayList<Music> newList = new ArrayList<Music>();
+			
+			while (read.hasNext()) {
+				String line = read.nextLine();
+				String[] split = line.split(", ");
+				Music mus = new Music(split[0], split[1], Integer.parseInt(split[2]), split[3]);
+				//newList.add(mus);
+				lib.addInAll(mus);
 			}
-		}
-		HashBand.add(index, Song);
-	}
-	private void addBySong(Music Song) {
-		int index= 0;
-		String Code=Song.getSong();
-		for(int i=0;i<Code.length() ; i++) {
-			index+=(int)Code.charAt(i);
-		}
-		
-		if(HashSong.get(index)!=null) {
-			while(HashSong.get(index).song.compareTo(Song.song)>0||HashSong.get(index)!=null) {
-				index++;
-			}
-		}
-		HashBand.add(index, Song);
 
+			read.close();
+			
 
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 		
-		
+
 	}
-	private void addByTime(Music Song) {
-		int Code=(int)Song.playtime;
-		
-		while(HashTime.get(Code).playtime-Song.playtime!=0|| HashTime.get(Code)!=null)
-			Code++;
-		HashTime.add(Code, Song);
-		
-		
-	}
-	
-	
+
 	/**
-	 * Returns a music array with the songs from a chosen band. 
-	 * @param Name
-	 * @return
+	 * Adds a song to the decided list.
+	 * 
+	 * @param listName the name of the list.
 	 */
-	public Music[] GetBand(String Name) {
-		int index= 0;
-		Music[] Array=new Music[150];
-		String Code=Name;
-		for(int i=0;i<Code.length() ; i++) {
-			index+=(int)Code.charAt(i);
-		}
-		while(HashBand.get(index).band.compareTo(Name)!=0) {
-			index++;
-		}
-		for(int i=0;HashBand.get(index+i).band.compareTo(Name)==0;i++) {
-			Array[i]=HashBand.get(index+i);
-		}
-		return Array;
-	}
-	/**
-	 * Returns a Music with the same song name.
-	 * @param Name
-	 * @return
-	 */
-	public Music GetSong(String Name) {
-		int index= 0;
-		String Code=Name;
-		for(int i=0;i<Code.length() ; i++) {
-			index+=(int)Code.charAt(i);
-		}
-		while(HashSong.get(index).song.compareTo(Name)!=0) {
-			index++;
-		}
-		return HashBand.get(index);
-	}
-	
-	
-	/**
-	 * Returns a Music array with songs with the same PlayTime.
-	 * @param time
-	 * @return
-	 */
-	public Music[] GetTime(long time) {
-		  int index= (int)time;
-		Music[] Array=new Music[40];
+	public static void addSong(String listName) {
+		try {
+			String total = "";
 
-		while(HashTime.get(index).playtime-time!=0) {
-			index++;
+			System.out.println("Type in the name of the Band/Group/Artist:");
+			total += in.nextLine() + ", ";
+			System.out.println("Type in the name of the Song:");
+			total += in.nextLine() + ", ";
+			System.out.println("Type in the length of the Song (in seconds):");
+			total += in.nextInt() + ", ";
+			System.out.println("Type in the name of the file:");
+			String temp = in.nextLine();
+			temp = in.nextLine();
+			total += temp;
+
+			write = new PrintWriter(new BufferedWriter(new FileWriter((listName), true)));
+			write.println(total);
+
+			write.close();
+			return;
+
+		} catch (Exception e) {
+			System.out.println(e);
 		}
-		for(int i=0;HashTime.get(index+i).playtime-time==0; i++) {
-			Array[i]=HashTime.get(index+i);
-		}
-		
-		return Array;
+		return;
 	}
 
-	
+	/**
+	 * Prints the menu.
+	 */
+	public static void printMenu() {
+		System.out.println("What would you like to do? ");
+		System.out.println("1. Add a new Song to a list");
+		System.out.println("2. Get a list");
+		System.out.println("3. Start MusicPlayer");
+		System.out.println("4. Exit");
+		System.out.println("5. Load Library");
+		System.out.print("\nEnter your choice: ");
+	}
+
+	public static void choices(int scan) {
+		switch (scan) {
+
+		case 1: {
+			System.out.println("Type the name of the list you wish to add:");
+			String scann = in.nextLine();
+			addSong(scann);
+			break;
+		}
+		case 2: {
+			System.out.println("Type in the name of the list:");
+			String read = in.next();
+			readInFile(read);
+			break;
+		}
+		case 3: {
+			musicPlayer mus = new musicPlayer();
+			mus.setVisible(true);
+			mus.setAlwaysOnTop(false);
+			break;
+		}
+		case 4: {
+			System.exit(0);
+			break;
+		}
+		case 5: {
+			readInFile("list.txt");
+		}
+		}
+	}
+
 }
