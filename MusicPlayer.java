@@ -284,14 +284,13 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			String s = JOptionPane.showInputDialog(this, "Enter name of Playist", "Enter Playlist", 1);
 			if (s != null) {
 				getPlayList = s + ".txt";
-				myPlayList = new PlayList(s);
 				System.out.println();
 				System.out.println("------- Successfully loaded playlist: " + getPlayList + " -------");
 				myPlayList.loadPlayList(s);
 				while (true) {
 					String str = JOptionPane.showInputDialog(this, "Enter song to add\n\nTo exit: press 'Avbryt'.",
 							"Enter song name", 1);
-					if (str == null) {
+					if (str == null || str.equals("null")) {
 						break;
 					}
 					System.out.println();
@@ -308,14 +307,13 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			String s = JOptionPane.showInputDialog(this, "Enter name of Playist", "Enter Playlist", 1);
 			if (s != null) {
 				getPlayList = s + ".txt";
-				myPlayList = new PlayList(s);
 				System.out.println();
 				System.out.println("------- Successfully loaded playlist: " + getPlayList + " -------");
 				myPlayList.loadPlayList(s);
 				while (true) {
 					String str = JOptionPane.showInputDialog(this, "Enter song to remove\n\nTo exit: press 'Avbryt'.",
 							"Enter song name to remove it", 1);
-					if (str == null) {
+					if (str == null || str.equals("null")) {
 						break;
 					}
 					removed = myPlayList.removeSong(str);
