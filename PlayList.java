@@ -7,8 +7,8 @@ import javax.swing.JTextField;
 
 public class PlayList {
 
-	static ArrayList<Music> songs;
-	static String playList = "";
+	public ArrayList<Music> songs;
+	public String playList;
 
 	/**
 	 * Makes a new playlist pop up window to add name in.
@@ -17,8 +17,8 @@ public class PlayList {
 
 		//JFrame frame = new JFrame("New Playlist");
 
-		//songs = new ArrayList<Music>();
-
+		songs = new ArrayList<Music>();
+		playList = null;
 		// JTextField textField = new JTextField("Please write a save file name.");
 		// frame.getContentPane().add(textField);
 
@@ -39,7 +39,7 @@ public class PlayList {
 		}
 	}
 
-	public static void savePlayList(String name) {
+	public void savePlayList(String name) {
 		PrintWriter filout = null;
 
 		try {
@@ -67,17 +67,7 @@ public class PlayList {
 
 	}
 
-	public static void makeNewPlayList(String name) {
-		PrintWriter filout = null;
-
-		try {
-			filout = new PrintWriter(new BufferedWriter(new FileWriter(name + ".txt", false)));
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-
-	public static void createPlaylist(Music[] hashlist) {
+	public void createPlaylist(Music[] hashlist) {
 		for (int i = 0; i < hashlist.length; i++) {
 			if (hashlist[i] != null) {
 				songs.add(hashlist[i]);
@@ -85,9 +75,9 @@ public class PlayList {
 		}
 	}
 
-	public static ArrayList<Music> loadPlayList(String name) {
+	public ArrayList<Music> loadPlayList(String name) {
 		try {
-			Scanner reader = new Scanner(new FileReader(new File(name)));
+			Scanner reader = new Scanner(new FileReader(new File(name + ".txt")));
 			songs = new ArrayList<Music>();
 			while (reader.hasNext()) {
 				String line = reader.nextLine();
@@ -97,10 +87,14 @@ public class PlayList {
 				songs.add(mus);
 
 			}
+			System.out.println("------- Successfully loaded playlist: " + MusicPlayer.getPlayList + " -------");
+			printPlayList();
 			reader.close();
 			return songs;
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println();
+			System.out.println("Created new Playlist: " + name + ".txt");
+			System.out.println();
 		}
 		return songs;
 	}
@@ -111,12 +105,10 @@ public class PlayList {
 	 * @param lib      what hash to get music file from.
 	 * @throws FileNotFoundException
 	 */
-	public static void addToPlayList(String SongName, Hashing lib) {
-		songs.add(lib.getSong(SongName));
-
+	public void addToPlayList(String songName, Hashing lib) {
+		songs.add(lib.getMusic(songName));
 		savePlayList(playList);
 		loadPlayList(playList);
-
 	}
 
 	/**
@@ -125,7 +117,7 @@ public class PlayList {
 	 * @param pref User input on how the list will be sorted.
 	 * @return sortedList The sorted list.
 	 */
-	public static void sortList(String pref) {
+	public void sortList(String pref) {
 
 		if (pref.equals("band")) {
 			Collections.sort(songs, new BandComparator());
@@ -138,11 +130,10 @@ public class PlayList {
 		}
 	}
 
-	public static void printPlayList() {
+	public void printPlayList() {
 		final Object[][] table = new String[songs.size()][];
 		for (int i = 0; i < songs.size(); i++) {
 			table[i] = new String[] { songs.get(i).band, songs.get(i).song, songs.get(i).playtime + "s" };
-
 		}
 		for (final Object[] row : table) {
 			System.out.format("%-15s%-15s%-15s\n", row);
