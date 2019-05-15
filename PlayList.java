@@ -15,7 +15,7 @@ public class PlayList {
 	 */
 	public PlayList() {
 
-		//JFrame frame = new JFrame("New Playlist");
+		// JFrame frame = new JFrame("New Playlist");
 
 		songs = new ArrayList<Music>();
 		playList = null;
@@ -24,7 +24,7 @@ public class PlayList {
 
 		// playList = textField.getText();
 
-		//savePlayList(playList);
+		// savePlayList(playList);
 
 	}
 
@@ -62,8 +62,21 @@ public class PlayList {
 
 		finally {
 			filout.close();
-
 		}
+
+	}
+
+	public boolean removeSong(String songName) {
+		String pName = MusicPlayer.getPlayList;
+		pName = pName.replaceAll(".txt", "");
+		for (int i = 0; i < songs.size(); i++) {
+			if (songs.get(i).song.equals(songName)) {
+				songs.remove(i);
+				savePlayList(pName);
+				return true;
+			}
+		}
+		return false;
 
 	}
 
@@ -87,13 +100,14 @@ public class PlayList {
 				songs.add(mus);
 
 			}
+			System.out.println();
 			System.out.println("------- Successfully loaded playlist: " + MusicPlayer.getPlayList + " -------");
 			printPlayList();
 			reader.close();
 			return songs;
 		} catch (Exception e) {
 			System.out.println();
-			System.out.println("Created new Playlist: " + name + ".txt");
+			System.out.println("------- Created new Playlist: " + name + ".txt -------");
 			System.out.println();
 		}
 		return songs;
@@ -136,9 +150,8 @@ public class PlayList {
 			table[i] = new String[] { songs.get(i).band, songs.get(i).song, songs.get(i).playtime + "s" };
 		}
 		for (final Object[] row : table) {
-			System.out.format("%-15s%-15s%-15s\n", row);
+			System.out.format("%-22s%-22s%-22s\n", row);
 		}
-		System.out.println();
 	}
 
 }
