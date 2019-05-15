@@ -21,37 +21,45 @@ public class Hashing {
 		currentSize = 0;
 	}
 
-	public void add(Music song) {
+	public void add(Music obj) {
 		doubleHashtabell();
-		int index = getIndex(song);
-		hashSong[index] = song;
+		int index = getIndex(obj.song);
+		hashSong[index] = obj;
 		currentSize++;
-
 	}
 
 	/**
 	 * Method that finds the object in the hashtabell.
 	 */
-	public Music getMusic(Music obj) {
-		String a = obj.song;
-
+	public Music getMusic(String a) {
 		int index = 0;
 		for (int i = 0; i < a.length(); i++) {
 			int letterValue = (int) a.charAt(i);
-			index += letterValue * 2 ^ (a.length() - i);
+			index += letterValue * (int) Math.pow(2, (a.length() - i));
 		}
 
 		int indexValue = index % hashSong.length;
 
 		int n = 1;
+		int i = 0;
 		int temp = indexValue;
-		while (hashSong[temp] != song) {
-			temp = indexValue + n ^ 2;
-			n++;
-			temp = temp % hashSong.length;
+		while (true) {
+			if (hashSong[temp] != null) {
+				if (hashSong[temp].song.equals(a)) {
+					break;
+				} else {
+					temp = indexValue + (int) Math.pow(n, 2);
+					System.out.println(temp);
+					n++;
+					temp = temp % hashSong.length;
+				}
+			} else if (i++ == 100) {
+				System.out.println("Song not found.");
+				break;
+			}
 		}
-
 		return hashSong[temp];
+
 	}
 
 	/**
@@ -114,13 +122,12 @@ public class Hashing {
 		return Array;
 	}
 
-	public static int getIndex(Music obj) {
-		String a = obj.song;
+	public static int getIndex(String a) {
 
 		int index = 0;
 		for (int i = 0; i < a.length(); i++) {
 			int letterValue = (int) a.charAt(i);
-			index += letterValue * 2 ^ (a.length() - i);
+			index += letterValue * (int) Math.pow(2, (a.length() - i));
 		}
 
 		int indexValue = index % hashSong.length;
@@ -130,11 +137,10 @@ public class Hashing {
 		int temp = indexValue;
 
 		while (hashSong[temp] != null) {
-			temp = indexValue + n ^ 2;
+			temp = indexValue + (int) Math.pow(n, 2);
 			n++;
 			temp = temp % hashSong.length;
 		}
-
 		return temp;
 	}
 
