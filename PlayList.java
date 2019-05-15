@@ -100,8 +100,6 @@ public class PlayList {
 				songs.add(mus);
 
 			}
-			System.out.println();
-			System.out.println("------- Successfully loaded playlist: " + MusicPlayer.getPlayList + " -------");
 			printPlayList();
 			reader.close();
 			return songs;
