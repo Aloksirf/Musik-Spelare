@@ -15,12 +15,13 @@ public class readFile {
 	public static void readInFile(Hashing toHash) {
 		try {
 			Scanner read = new Scanner(new File("Library.txt"));
-
+			System.out.println("Current Music Library:");
 			while (read.hasNext()) {
 				String line = read.nextLine();
 				String[] split = line.split(", ");
 				Music mus = new Music(split[0], split[1], Integer.parseInt(split[2]), split[3]);
 				toHash.add(mus);
+				System.out.println(mus.toString());
 			}
 
 			read.close();
