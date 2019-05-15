@@ -38,44 +38,44 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		textPlayList.setEditable(false);
 		jf = new JFrame("MusicPlayer");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(new FlowLayout()); // Så knapparna inte hamnar på varandra! Annan Layout!
-		setLocation(200, 200); // Var fönstret ska börja (x,y)
+		setLayout(new FlowLayout()); // SÃ¥ knapparna inte hamnar pÃ¥ varandra! Annan Layout!
+		setLocation(200, 200); // Var fÃ¶nstret ska bÃ¶rja (x,y)
 		setResizable(false);
 
 		// Textbox, den kan bara ladda .wav-filer
-		// Man behöver bara skriva "test", den lägger till .wav själv.
+		// Man behÃ¶ver bara skriva "test", den lÃ¤gger till .wav sjÃ¤lv.
 		jfText = new JTextField("Enter the name of your music file here.", 30);
 
 		// Knappar
-		JButton b1 = new JButton("");
-		JButton b2 = new JButton("");
-		JButton b3 = new JButton("");
+		JButton play = new JButton("");
+		JButton pause = new JButton("");
+		JButton stop = new JButton("");
 		add(jfText);
 		add(textPlayList);
 
-		// Lägger till knapparna i JFrame
-		add(b1, BorderLayout.SOUTH);
-		add(b2, BorderLayout.NORTH);
-		add(b3, BorderLayout.SOUTH);
+		// LÃ¤gger till knapparna i JFrame
+		add(play, BorderLayout.SOUTH);
+		add(pause, BorderLayout.NORTH);
+		add(stop, BorderLayout.SOUTH);
 
-		b1.setOpaque(false);
-		b1.setContentAreaFilled(false);
-		b1.setBorderPainted(false);
+		play.setOpaque(false);
+		play.setContentAreaFilled(false);
+		play.setBorderPainted(false);
 
-		b2.setOpaque(false);
-		b2.setContentAreaFilled(false);
-		b2.setBorderPainted(false);
+		pause.setOpaque(false);
+		pause.setContentAreaFilled(false);
+		pause.setBorderPainted(false);
 
-		b3.setOpaque(false);
-		b3.setContentAreaFilled(false);
-		b3.setBorderPainted(false);
+		stop.setOpaque(false);
+		stop.setContentAreaFilled(false);
+		stop.setBorderPainted(false);
 
-		b1.setIcon(new ImageIcon("Images/play.png"));
-		b2.setIcon(new ImageIcon("Images/pause.png"));
-		b3.setIcon(new ImageIcon("Images/stop.png"));
+		play.setIcon(new ImageIcon("Images/play.png"));
+		pause.setIcon(new ImageIcon("Images/pause.png"));
+		stop.setIcon(new ImageIcon("Images/stop.png"));
 
-		// Gör så knapparna reagerar på knapptryck
-		b1.addActionListener(new ActionListener() {
+		// GÃ¶r sÃ¥ knapparna reagerar pÃ¥ knapptryck
+		play.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				counter = 0;
 				playSound(jfText.getText() + ".wav");
@@ -83,7 +83,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			}
 		});
 
-		b2.addActionListener(new ActionListener() {
+		pause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (musicFile == null) {
 					JOptionPane.showMessageDialog(jf, "No Audio-file loaded.");
@@ -99,13 +99,14 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 				}
 			}
 		});
-		b3.addActionListener(new ActionListener() {
+
+		stop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				counter = 1;
 				if (musicFile == null) {
 					JOptionPane.showMessageDialog(jf, "No Audio-file loaded.");
 				} else {
-					if (!musicFile.isRunning()) {
+					if (!musicFile.isOpen()) {
 						JOptionPane.showMessageDialog(jf, "No Audio running.");
 					} else {
 						musicFile.stop();
@@ -114,9 +115,8 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 				}
 			}
 		});
-		b2.addActionListener(this);
 
-		// Används endast när vi trycker ENTER för att starta en låt.
+		// AnvÃ¤nds endast nÃ¤r vi trycker ENTER fÃ¶r att starta en lÃ¥t.
 		jfText.addKeyListener(this);
 
 		// Menu
@@ -134,15 +134,16 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		menuBar.add(m2);
 
 		JMenuItem item1 = new JMenuItem("Open Sound", new ImageIcon("Images/openfile.png"));
-		JMenuItem item8 = new JMenuItem("Open", new ImageIcon("Images/openfile.png"));
+		JMenuItem item2 = new JMenuItem("Exit", new ImageIcon("Images/exit.png"));
+		JMenuItem item3 = new JMenuItem("About", new ImageIcon("Images/about.png"));
 		JMenuItem item4 = new JMenuItem("Band", new ImageIcon("Images/group.png"));
 		JMenuItem item5 = new JMenuItem("Song", new ImageIcon("Images/song.png"));
 		JMenuItem item6 = new JMenuItem("Playtime", new ImageIcon("Images/time.png"));
 		JMenuItem item7 = new JMenuItem("Filecode", new ImageIcon("Images/code.png"));
-		JMenuItem item2 = new JMenuItem("Exit", new ImageIcon("Images/exit.png"));
-		JMenuItem item3 = new JMenuItem("About", new ImageIcon("Images/about.png"));
+		JMenuItem item8 = new JMenuItem("Open", new ImageIcon("Images/openfile.png"));
+		JMenuItem item9 = new JMenuItem("Print Library", new ImageIcon("Images/print.png"));
 		JMenuItem item10 = new JMenuItem("Create List", new ImageIcon("Images/add.png"));
-		JMenuItem item9 = new JMenuItem("Print Library", new ImageIcon("Images/newfile.png"));
+		JMenuItem item11 = new JMenuItem("Remove Song", new ImageIcon("Images/remove.png"));
 
 		m.add(item1).addActionListener(this);
 		m.add(item9).addActionListener(this);
@@ -152,6 +153,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 
 		m3.add(item8).addActionListener(this);
 		m3.add(item10).addActionListener(this);
+		m3.add(item11).addActionListener(this);
 		m3.add(m4);
 
 		m4.add(item4).addActionListener(this);
@@ -160,7 +162,8 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		m4.add(item7).addActionListener(this);
 
 		setJMenuBar(menuBar);
-		// pack(); // Allt på samma rad, ser också till att allt du lagt till kommer med
+		// pack(); // Allt pÃ¥ samma rad, ser ocksÃ¥ till att allt du lagt till kommer
+		// med
 		// i rutan!!
 	}
 
@@ -171,7 +174,8 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 	 */
 	public void playSound(String file) {
 		try {
-			if (musicFile == null || !musicFile.isRunning()) { // Om du ändrar här, så måste du ändra på ActionPerformed
+			if (musicFile == null || !musicFile.isRunning()) { // Om du Ã¤ndrar hÃ¤r, sÃ¥ mÃ¥ste du Ã¤ndra pÃ¥
+																// ActionPerformed
 																// med STOP
 				AudioInputStream audio = AudioSystem.getAudioInputStream(new File(file));
 				musicFile = AudioSystem.getClip();
@@ -270,10 +274,8 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			playSound("victory.wav");
 			JOptionPane.showMessageDialog(this, "MADE BY THE AMAZING TEAM!!!");
 		} else if (e.getActionCommand() == "Create List") {
-
 			String s = JOptionPane.showInputDialog(this, "Enter name of Playist", "Enter Playlist", 1);
 			if (s == null) {
-
 			} else {
 				getPlayList = s + ".txt";
 				myPlayList = new PlayList(s);
@@ -286,6 +288,38 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 						}
 						myPlayList.addToPlayList(str, MainFile.library);
 						JOptionPane.showMessageDialog(this, "Successfully added " + str + " to your playlist.");
+					}
+					s = s.replaceAll(".txt", "");
+					myPlayList.savePlayList(s);
+				} catch (Exception ex) {
+					// System.out.println(ex);
+				}
+			}
+
+		} else if (e.getActionCommand() == "Remove Song") {
+			boolean removed;
+			String s = JOptionPane.showInputDialog(this, "Enter name of Playist", "Enter Playlist", 1);
+			if (s == null) {
+			} else {
+				getPlayList = s + ".txt";
+				myPlayList = new PlayList(s);
+				try {
+					while (true) {
+						String str = JOptionPane.showInputDialog(this, "Enter song to remove\n\nTo exit: press 'Avbryt'.",
+								"Enter song name to remove it", 1);
+						if (str == null) {
+							break;
+						}
+						removed = myPlayList.removeSong(str);
+						if(removed) {
+							JOptionPane.showMessageDialog(this, "Successfully removed " + str + " from your playlist.");
+							myPlayList.loadPlayList(s);
+						} else {
+							System.out.println();
+							System.out.println("Song not found.");
+						}
+						
+						
 					}
 					s = s.replaceAll(".txt", "");
 					myPlayList.savePlayList(s);
