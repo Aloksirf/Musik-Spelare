@@ -371,15 +371,4 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 	public void keyReleased(KeyEvent e) {
 
 	}
-	/**
-	 * PRINT playlist in MessageBox
-	 * 
-	 * public void printPlayList() { String temp = "------- Your Playlist
-	 * -------\n\n"; final String[] table = new String[myPlayList.songs.size() * 4];
-	 * for (int i = 0; i < myPlayList.songs.size(); i++) { table[i] =
-	 * myPlayList.songs.get(i).band + ", " + myPlayList.songs.get(i).song + ", " +
-	 * myPlayList.songs.get(i).playtime + "s\n"; } for (int i = 0; i <
-	 * myPlayList.songs.size(); i++) { temp += table[i]; }
-	 * JOptionPane.showMessageDialog(this, temp, "Songs in your playlist", 1); }
-	 */
 }
