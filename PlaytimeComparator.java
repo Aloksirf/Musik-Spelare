@@ -1,5 +1,10 @@
 import java.util.Comparator;
 
+/**
+* Class that that implements Comparator and compares two music objects by the playtime.
+*
+* @author Andreas Stadin, Nickla Kristörm, Vidar Hårding and Oliver Olsson.
+*/
 public class PlaytimeComparator implements Comparator<Music> {
 	
 	/**
