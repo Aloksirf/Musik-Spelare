@@ -26,7 +26,6 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 	private JFrame jf;
 	private JTextField jfText, textPlayList;
 	private int counter = 0;
-	public String getSong;
 	public static String getPlayList;
 	public static PlayList myPlayList = new PlayList();
 
@@ -35,7 +34,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		super("MusicPlayer");
 		getPlayList = "Library.txt";
 		setAlwaysOnTop(true);
-		setSize(300, 165);
+		setSize(350, 165);
 		textPlayList = new JTextField("Active Playlist: ", 30);
 		textPlayList.setEditable(false);
 		textPlayList.setBackground(Color.orange);
@@ -73,6 +72,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		stop.setContentAreaFilled(false);
 		stop.setBorderPainted(false);
 
+		// Sätter bilder på knapparna
 		play.setIcon(new ImageIcon("Images/play.png"));
 		pause.setIcon(new ImageIcon("Images/pause.png"));
 		stop.setIcon(new ImageIcon("Images/stop.png"));
@@ -147,6 +147,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		JMenuItem item9 = new JMenuItem("Print Library", new ImageIcon("Images/print.png"));
 		JMenuItem item10 = new JMenuItem("Add Song", new ImageIcon("Images/add.png"));
 		JMenuItem item11 = new JMenuItem("Remove Song", new ImageIcon("Images/remove.png"));
+		JMenuItem item12 = new JMenuItem("New Playlist", new ImageIcon("Images/newfile.png"));
 
 		m.add(item1).addActionListener(this);
 		m.add(item9).addActionListener(this);
@@ -154,6 +155,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 
 		m2.add(item3).addActionListener(this);
 
+		m3.add(item12).addActionListener(this);
 		m3.add(item8).addActionListener(this);
 		m3.add(item10).addActionListener(this);
 		m3.add(item11).addActionListener(this);
@@ -305,10 +307,20 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 					if (str == null || str.equals("null")) {
 						break;
 					}
-					System.out.println();
-					System.out.println("------- Successfully loaded playlist: " + getPlayList + " -------");
-					myPlayList.addToPlayList(str, MainFile.library);
-					JOptionPane.showMessageDialog(this, "Successfully added " + str + " to your playlist.");
+					/** FIXA HÄR
+					 * 
+					 * 
+					 * 
+					 * 
+					 * 
+					 * 
+					 */
+					boolean temp = myPlayList.addToPlayList(str, MainFile.library);
+					if (temp) {
+						JOptionPane.showMessageDialog(this, "Successfully added " + str + " to your playlist.");
+						System.out.println();
+						System.out.println("------- Successfully loaded playlist: " + getPlayList + " -------");
+					}
 				}
 				s = s.replaceAll(".txt", "");
 				myPlayList.savePlayList(s);
