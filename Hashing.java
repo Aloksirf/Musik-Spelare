@@ -1,7 +1,3 @@
-
-import java.util.ArrayList;
-import java.util.Comparator;
-
 /**
  * är en konstruktor som lagrar musikfiler i en hashlista.
  * 
@@ -12,8 +8,6 @@ import java.util.Comparator;
 public class Hashing {
 
 	public static Music[] hashSong;
-	public static Music[] hashBand;
-	public static Music[] hashTime;
 	public static int currentSize;
 
 	public Hashing() {
@@ -49,77 +43,16 @@ public class Hashing {
 					break;
 				} else {
 					temp = indexValue + (int) Math.pow(n, 2);
-					System.out.println(temp);
 					n++;
 					temp = temp % hashSong.length;
 				}
 			} else if (i++ == 100) {
 				System.out.println("Song not found.");
-				break;
+				return null;
 			}
 		}
 		return hashSong[temp];
 
-	}
-
-	/**
-	 * Returns a music array with the songs from a chosen band.
-	 * 
-	 * @param Name
-	 * @return
-	 */
-	public Music[] getBand(String Name) {
-		int index = 0;
-		Music[] Array = new Music[150];
-		String Code = Name;
-		for (int i = 0; i < Code.length(); i++) {
-			index += (int) Code.charAt(i);
-		}
-		while (hashBand[index].band.compareTo(Name) != 0) {
-			index++;
-		}
-		for (int i = 0; hashBand[index + i].band.compareTo(Name) == 0; i++) {
-			Array[i] = hashBand[index + i];
-		}
-		return Array;
-	}
-
-	/**
-	 * Returns a Music with the same song name.
-	 * 
-	 * @param Name
-	 * @return
-	 */
-	public Music getSong(String Name) {
-		int index = 0;
-		String Code = Name;
-		for (int i = 0; i < Code.length(); i++) {
-			index += (int) Code.charAt(i);
-		}
-		while (hashSong[index].song.compareTo(Name) != 0) {
-			index++;
-		}
-		return hashBand[index];
-	}
-
-	/**
-	 * Returns a Music array with songs with the same PlayTime.
-	 * 
-	 * @param time
-	 * @return
-	 */
-	public Music[] getTime(long time) {
-		int index = (int) time;
-		Music[] Array = new Music[40];
-
-		while (hashTime[index].playtime - time != 0) {
-			index++;
-		}
-		for (int i = 0; hashTime[index + i].playtime - time == 0; i++) {
-			Array[i] = hashTime[index + i];
-		}
-
-		return Array;
 	}
 
 	public static int getIndex(String a) {
