@@ -176,7 +176,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 	 * 
 	 * @param file The name of the file.
 	 */
-	public void playSound(String file) {
+	private void playSound(String file) {
 		try {
 			if (musicFile == null || !musicFile.isRunning()) { // Om du Ã¤ndrar hÃ¤r, sÃ¥ mÃ¥ste du Ã¤ndra pÃ¥
 																// ActionPerformed med STOP
@@ -194,7 +194,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 	 * Opens up the current directory for you to choose a .wav-file. Start playing
 	 * the sound once open.
 	 */
-	public void openSound() {
+	private void openSound() {
 		JFileChooser choice = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("wav", "WAV");
 		choice.setFileFilter(filter);
@@ -209,7 +209,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		}
 	}
 
-	public void openPlayList() {
+	private void openPlayList() {
 		JFileChooser choice = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("txt", "TXT");
 		choice.setFileFilter(filter);
@@ -307,19 +307,14 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 					if (str == null || str.equals("null")) {
 						break;
 					}
-					/** FIXA HÄR
-					 * 
-					 * 
-					 * 
-					 * 
-					 * 
-					 * 
-					 */
 					boolean temp = myPlayList.addToPlayList(str, MainFile.library);
 					if (temp) {
 						JOptionPane.showMessageDialog(this, "Successfully added " + str + " to your playlist.");
 						System.out.println();
 						System.out.println("------- Successfully loaded playlist: " + getPlayList + " -------");
+						s = s.replaceAll(".txt", "");
+						myPlayList.savePlayList(s);
+						myPlayList.loadPlayList(s);
 					}
 				}
 				s = s.replaceAll(".txt", "");
@@ -356,6 +351,13 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 				myPlayList.savePlayList(s);
 			}
 
+		} else if (e.getActionCommand() == "New Playlist") {
+			String str = JOptionPane.showInputDialog(this, "Enter Playlist name: ", "Enter Playlist name", 1);
+			if (str == null || str.equals("null")) {
+			} else {
+				myPlayList.makePlaylist(str);
+				JOptionPane.showMessageDialog(this, "Successfully created " + str + ".txt as a playlist.");
+			}
 		} else if (e.getActionCommand() == "Print Library") {
 			System.out.println();
 			System.out.println("------------- Printing Library File -------------");
