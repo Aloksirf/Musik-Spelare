@@ -1,14 +1,22 @@
 import java.util.Comparator;
 
 public class PlaytimeComparator implements Comparator<Music> {
-
-	public int compare(Music o1, Music o2) {
-		if (o1.playtime < o2.playtime) {
+	
+	/**
+	* Method that compares two music objects by playtime.
+	*
+	* @param m1 first music object.
+	* @param m2 second music object.
+	* @return -1 if m1 < m2, 1 if m1 > m2 and 0 if m1 == m2.
+	*/
+	public int compare(Music m1, Music m2) {
+		if (m1.playtime < m2.playtime) {
 			return -1;
-		} else if (o1.playtime > o2.playtime) {
+		} else if (m1.playtime > m2.playtime) {
 			return 1;
 		} else {
 			return 0;
 		}
 	}
 }
+
