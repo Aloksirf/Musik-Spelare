@@ -293,8 +293,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			String s = getPlayList.replaceAll(".txt", "");
 			if (s == null) {
 			} else if (s.equals("Library")) {
-				System.out.println();
-				System.out.println("Cannot Add to Library File. Please open a playlist first.");
+				JOptionPane.showMessageDialog(this, "Please open a playlist first.", "Error", 2);
 			} else {
 				getPlayList = s + ".txt";
 				System.out.println();
@@ -319,8 +318,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			String s = getPlayList.replaceAll(".txt", "");
 			if (s == null) {
 			} else if (s.equals("Library")) {
-				System.out.println();
-				System.out.println("Cannot Remove from Library File. Please open a playlist first.");
+				JOptionPane.showMessageDialog(this, "Please open a playlist first.", "Error", 2);
 			} else {
 				boolean removed;
 				System.out.println();
