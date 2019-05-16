@@ -17,14 +17,14 @@ public class PlayList {
 
 		songs = new ArrayList<Music>();
 		playList = null;
-		
+
 	}
 
 	public PlayList(String name) {
 		try {
 			songs = new ArrayList<Music>();
 			playList = name;
-			loadPlayList(playList);		// Loads a playlist.
+			loadPlayList(playList); // Loads a playlist.
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -85,11 +85,16 @@ public class PlayList {
 			reader.close();
 			return songs;
 		} catch (Exception e) {
-//Andreas	System.out.println();
-//			System.out.println("------- Created new Playlist: " + name + ".txt -------");
-//			System.out.println();
 		}
 		return songs;
+	}
+
+	public void makePlaylist(String name) {
+		try {
+			PrintWriter filout = new PrintWriter(new BufferedWriter(new FileWriter(name + ".txt", false)));
+			filout.close();
+		} catch (Exception e) {
+		}
 	}
 
 	/**
@@ -99,10 +104,10 @@ public class PlayList {
 	 * @throws FileNotFoundException
 	 */
 	public boolean addToPlayList(String songName, Hashing lib) {
-		if(lib.getMusic(songName) != null) {
+		if (lib.getMusic(songName) != null) {
 			songs.add(lib.getMusic(songName));
-			savePlayList(playList);
-			loadPlayList(playList);
+			// savePlayList(playList);
+			// loadPlayList(playList);
 			return true;
 		}
 		return false;
