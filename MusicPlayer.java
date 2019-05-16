@@ -346,8 +346,6 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 
 		} else if (e.getActionCommand() == "Print Library") {
 			System.out.println();
-			getPlayList = "Library.txt";
-			System.out.println();
 			System.out.println("------------- Printing Library File -------------");
 			myPlayList.loadPlayList("Library");
 		} else if (e.getActionCommand() == "Exit") {
