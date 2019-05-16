@@ -38,6 +38,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		setSize(300, 165);
 		textPlayList = new JTextField("Active Playlist: ", 30);
 		textPlayList.setEditable(false);
+		textPlayList.setBackground(Color.orange);
 		jf = new JFrame("MusicPlayer");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new FlowLayout()); // SÃ¥ knapparna inte hamnar pÃ¥ varandra! Annan Layout!
@@ -217,11 +218,18 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			try {
 				File selectedFile = choice.getSelectedFile();
 				String listName = selectedFile.getName();
-				getPlayList = listName;
-				listName = listName.replaceAll(".txt", "");
-				System.out.println();
-				System.out.println("------- Successfully loaded playlist: " + getPlayList + " -------");
-				myPlayList.loadPlayList(listName);
+				if (listName.equals("Library.txt")) {
+					System.out.println();
+					System.out.println("Cannot open Library File. Please choose another playlist.");
+				} else {
+					getPlayList = listName;
+					listName = listName.replaceAll(".txt", "");
+					System.out.println();
+					System.out.println("------- Successfully loaded playlist: " + getPlayList + " -------");
+					myPlayList.loadPlayList(listName);
+					textPlayList.setText("Active Playlist:     " + getPlayList);
+					textPlayList.setBackground(Color.GREEN);
+				}
 			} catch (Exception e) {
 				System.out.println(e);
 			}
@@ -245,8 +253,6 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			}
 		} else if (e.getActionCommand() == "Open") {
 			openPlayList();
-			textPlayList.setText("Active Playlist:     " + getPlayList);
-			textPlayList.setBackground(Color.GREEN);
 		} else if (e.getActionCommand() == "Playtime") {
 			if (getPlayList != null) {
 				System.out.println();
