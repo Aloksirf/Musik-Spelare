@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +33,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 	/** Constructor */
 	public MusicPlayer() {
 		super("MusicPlayer");
+		getPlayList = "Library.txt";
 		setAlwaysOnTop(true);
 		setSize(300, 165);
 		textPlayList = new JTextField("Active Playlist: ", 30);
@@ -142,7 +144,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		JMenuItem item7 = new JMenuItem("Filecode", new ImageIcon("Images/code.png"));
 		JMenuItem item8 = new JMenuItem("Open", new ImageIcon("Images/openfile.png"));
 		JMenuItem item9 = new JMenuItem("Print Library", new ImageIcon("Images/print.png"));
-		JMenuItem item10 = new JMenuItem("Manage list/Add Song", new ImageIcon("Images/add.png"));
+		JMenuItem item10 = new JMenuItem("Add Song", new ImageIcon("Images/add.png"));
 		JMenuItem item11 = new JMenuItem("Remove Song", new ImageIcon("Images/remove.png"));
 
 		m.add(item1).addActionListener(this);
@@ -244,6 +246,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		} else if (e.getActionCommand() == "Open") {
 			openPlayList();
 			textPlayList.setText("Active Playlist:     " + getPlayList);
+			textPlayList.setBackground(Color.GREEN);
 		} else if (e.getActionCommand() == "Playtime") {
 			if (getPlayList != null) {
 				System.out.println();
@@ -280,9 +283,13 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		} else if (e.getActionCommand() == "About") {
 			playSound("victory.wav");
 			JOptionPane.showMessageDialog(this, "MADE BY THE AMAZING TEAM!!!");
-		} else if (e.getActionCommand() == "Manage list/Add Song") {
-			String s = JOptionPane.showInputDialog(this, "Enter name of Playist", "Enter Playlist", 1);
-			if (s != null) {
+		} else if (e.getActionCommand() == "Add Song") {
+			String s = getPlayList.replaceAll(".txt", "");
+			if (s == null) {
+			} else if (s.equals("Library")) {
+				System.out.println();
+				System.out.println("Cannot Add to Library File. Please open a playlist first.");
+			} else {
 				getPlayList = s + ".txt";
 				System.out.println();
 				System.out.println("------- Successfully loaded playlist: " + getPlayList + " -------");
@@ -303,10 +310,13 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			}
 
 		} else if (e.getActionCommand() == "Remove Song") {
-			boolean removed;
-			String s = JOptionPane.showInputDialog(this, "Enter name of Playist", "Enter Playlist", 1);
-			if (s != null) {
-				getPlayList = s + ".txt";
+			String s = getPlayList.replaceAll(".txt", "");
+			if (s == null) {
+			} else if (s.equals("Library")) {
+				System.out.println();
+				System.out.println("Cannot Remove from Library File. Please open a playlist first.");
+			} else {
+				boolean removed;
 				System.out.println();
 				System.out.println("------- Successfully loaded playlist: " + getPlayList + " -------");
 				myPlayList.loadPlayList(s);
@@ -327,7 +337,6 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 						System.out.println("Song not found.");
 					}
 				}
-				s = s.replaceAll(".txt", "");
 				myPlayList.savePlayList(s);
 			}
 
