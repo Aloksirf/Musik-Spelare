@@ -15,25 +15,16 @@ public class PlayList {
 	 */
 	public PlayList() {
 
-		// JFrame frame = new JFrame("New Playlist");
-
 		songs = new ArrayList<Music>();
 		playList = null;
-		// JTextField textField = new JTextField("Please write a save file name.");
-		// frame.getContentPane().add(textField);
-
-		// playList = textField.getText();
-
-		// savePlayList(playList);
-
+		
 	}
 
 	public PlayList(String name) {
 		try {
 			songs = new ArrayList<Music>();
 			playList = name;
-			// Loads a playlist.
-			loadPlayList(playList);
+			loadPlayList(playList);		// Loads a playlist.
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -80,14 +71,6 @@ public class PlayList {
 
 	}
 
-	public void createPlaylist(Music[] hashlist) {
-		for (int i = 0; i < hashlist.length; i++) {
-			if (hashlist[i] != null) {
-				songs.add(hashlist[i]);
-			}
-		}
-	}
-
 	public ArrayList<Music> loadPlayList(String name) {
 		try {
 			Scanner reader = new Scanner(new FileReader(new File(name + ".txt")));
@@ -95,18 +78,16 @@ public class PlayList {
 			while (reader.hasNext()) {
 				String line = reader.nextLine();
 				String[] info = line.split(", ");
-
 				Music mus = new Music(info[0], info[1], Long.parseLong(info[2]), info[3]);
 				songs.add(mus);
-
 			}
 			printPlayList();
 			reader.close();
 			return songs;
 		} catch (Exception e) {
-			System.out.println();
-			System.out.println("------- Created new Playlist: " + name + ".txt -------");
-			System.out.println();
+//Andreas	System.out.println();
+//			System.out.println("------- Created new Playlist: " + name + ".txt -------");
+//			System.out.println();
 		}
 		return songs;
 	}
@@ -117,10 +98,14 @@ public class PlayList {
 	 * @param lib      what hash to get music file from.
 	 * @throws FileNotFoundException
 	 */
-	public void addToPlayList(String songName, Hashing lib) {
-		songs.add(lib.getMusic(songName));
-		savePlayList(playList);
-		loadPlayList(playList);
+	public boolean addToPlayList(String songName, Hashing lib) {
+		if(lib.getMusic(songName) != null) {
+			songs.add(lib.getMusic(songName));
+			savePlayList(playList);
+			loadPlayList(playList);
+			return true;
+		}
+		return false;
 	}
 
 	/**
