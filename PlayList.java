@@ -7,7 +7,7 @@ import javax.swing.JTextField;
 
 public class PlayList {
 
-	public ArrayList<Music> songs;
+	public static ArrayList<Music> songs;
 	public String playList;
 
 	/**
@@ -88,6 +88,11 @@ public class PlayList {
 		return songs;
 	}
 
+	/**
+	 * Creates a new .txt file with the chosen name.
+	 * 
+	 * @param name is the name of the textdocument.
+	 */
 	public void makePlaylist(String name) {
 		try {
 			PrintWriter filout = new PrintWriter(new BufferedWriter(new FileWriter(name + ".txt", false)));
@@ -105,8 +110,6 @@ public class PlayList {
 	public boolean addToPlayList(String songName, Hashing lib) {
 		if (lib.getMusic(songName) != null) {
 			songs.add(lib.getMusic(songName));
-			// savePlayList(playList);
-			// loadPlayList(playList);
 			return true;
 		}
 		return false;
@@ -131,7 +134,7 @@ public class PlayList {
 		}
 	}
 
-	public void printPlayList() {
+	public static void printPlayList() {
 		final Object[][] table = new String[songs.size()][];
 		for (int i = 0; i < songs.size(); i++) {
 			table[i] = new String[] { songs.get(i).band, songs.get(i).song, songs.get(i).playtime + "s" };
@@ -140,8 +143,7 @@ public class PlayList {
 			System.out.format("%-22s%-22s%-22s\n", row);
 		}
 	}
-	
-	
+
 	/**
 	 * Checks if the String is a band or not. Used to print if true.
 	 * 
@@ -169,6 +171,5 @@ public class PlayList {
 			}
 		}
 	}
-
 
 }
