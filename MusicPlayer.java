@@ -359,7 +359,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			} else {
 				boolean check = PlayList.checkBandExistence(str);
 				if (check) {
-					System.out.println("\n----------- Songs by " + str + "-----------");
+					System.out.println("\n----------- Songs by " + str + " -----------");
 					PlayList.printSongsFromBand(str);
 				} else {
 					System.out.println("\nCouldn't find " + str + " in library file.");
