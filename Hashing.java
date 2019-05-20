@@ -37,7 +37,7 @@ public class Hashing {
 	 * @return The music object if it exist and null if object
 	 * isn't found.
 	 */
-	public Music getMusic(String a) {
+	public static Music getMusic(String a) {
 		int index = 0;
 		for (int i = 0; i < a.length(); i++) {
 			int letterValue = (int) a.charAt(i);
@@ -47,7 +47,6 @@ public class Hashing {
 		int indexValue = index % hashSong.length;
 
 		int n = 1;
-		int i = 0;
 		int temp = indexValue;
 		while (true) {
 			if (hashSong[temp] != null) {
@@ -71,9 +70,9 @@ public class Hashing {
 	* Method that calculates the index at wich the object will be added.
 	*
 	* @param a Name of the song that will be added.
-	* @return temp The index at wich the object will be added.
+	* @return temp The index at which the object will be added.
 	*/
-	private static int calculateIndex(String a) {
+	public static int calculateIndex(String a) {
 
 		int index = 0;
 		for (int i = 0; i < a.length(); i++) {
