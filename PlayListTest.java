@@ -13,6 +13,7 @@ public class PlayListTest {
 PlayList first;
 PlayList second;
 PlayList third;
+Hashing library = new Hashing();
 
 	@Before 
 	public void testPlayList() {
@@ -24,7 +25,6 @@ PlayList third;
 	@Test
 	public void testLoad() {
 		
-		assertSame(first.songs.size(),0);
 		assertEquals("Test if PlayList is empty",true,(first.songs.size()==0));
 		first.loadPlayList("Library");
 		assertEquals("Test if PlayList is empty",false,(first.songs.size()==0));
@@ -50,9 +50,25 @@ PlayList third;
 		first.songs.get(-1);
 	}
 	
-	@Test
+
+
+@Test
 	public void testAddRemove() {
-		
+		// Method (removeSongForTestCase) is Equal to original (removeSong) but works
+		// with this JUnit. 2 rows removed and save focused on "TestCase.txt" and not the actual chosen playlist.
+		MainFile.readInFile(library);
+		assertEquals("Try to Remove from an empty file.", false, first.removeSongForTestCase("Eat It"));
+		first.addToPlayList("Barbie Girl", library);
+		first.addToPlayList("Eat It", library);
+		first.savePlayList("TestCase");
+		assertEquals("Removes Barbie Girl from the playlist", true, first.removeSongForTestCase("Barbie Girl"));
+		first.removeSongForTestCase("Eat It"); // Only Works for THIS test case.
+		assertEquals("Try to Remove song that isn't there.", false, first.removeSongForTestCase("Barbie Girl"));
+
+		assertEquals("Try to Add song that isn't in Library-file.", false,
+				first.addToPlayList("jhasvfajhv", library));
+		assertEquals("Try to Add song that is in Library-file.", true, first.addToPlayList("Beat It", library));
+
 	}
 	@Test
 	public void testSearch() {
