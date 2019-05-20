@@ -58,8 +58,8 @@ public class Hashing {
 					n++;
 					temp = temp % hashSong.length;
 				}
-			} else if (i++ == 100) {
-				System.out.println("\nSong not found.");
+			} else {
+				System.out.println("\nSong not found. Be aware of letters with Upper Case.");
 				return null;
 			}
 		}
