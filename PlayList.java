@@ -158,7 +158,7 @@ public class PlayList {
 	}
 
 	/**
-	 * Prints out all the songs from a specific Band.
+	 * Prints all the songs from a specific Band.
 	 * 
 	 * @param band The band you wish to see all their songs.
 	 */
