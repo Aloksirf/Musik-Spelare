@@ -81,7 +81,6 @@ public class PlayList {
 				Music mus = new Music(info[0], info[1], Long.parseLong(info[2]), info[3]);
 				songs.add(mus);
 			}
-			printPlayList();
 			reader.close();
 			return songs;
 		} catch (Exception e) {
