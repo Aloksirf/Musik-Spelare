@@ -70,6 +70,22 @@ public class PlayList {
 		return false;
 
 	}
+	
+	/** Same as the one above but is only focused on the JUnit. */
+	public boolean removeSongForTestCase(String songName) {
+		if (songName.equals("null") || songName == null) {
+			return false;
+		} else {
+			for (int i = 0; i < songs.size(); i++) {
+				if (songs.get(i).song.equals(songName)) {
+					songs.remove(i);
+					savePlayList("TestCase");
+					return true;
+				}
+			}
+			return false;
+		}
+	}
 
 	public ArrayList<Music> loadPlayList(String name) {
 		try {
