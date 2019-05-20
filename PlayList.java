@@ -141,5 +141,35 @@ public class PlayList {
 			System.out.format("%-22s%-22s%-22s\n", row);
 		}
 	}
+	
+	
+	/**
+	 * Checks if the String is a band or not. Used to print if true.
+	 * 
+	 * @param band The band you're searching for.
+	 * @return True if you find the band, else return false.
+	 */
+	public static boolean checkBandExistence(String band) {
+		for (int i = 0; i < songs.size(); i++) {
+			if (band.equals(songs.get(i).band)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Prints out all the songs from a specific Band.
+	 * 
+	 * @param band The band you wish to see all their songs.
+	 */
+	public static void printSongsFromBand(String band) {
+		for (int i = 0; i < songs.size(); i++) {
+			if (band.equals(songs.get(i).band)) {
+				System.out.println(songs.get(i).song);
+			}
+		}
+	}
+
 
 }
