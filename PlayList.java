@@ -1,18 +1,16 @@
 
+/**
+ * This class creates a playlist that contains Music.
+ */
 import java.io.*;
 import java.util.*;
-
-import javax.swing.JFrame;
-import javax.swing.JTextField;
 
 public class PlayList {
 
 	public static ArrayList<Music> songs;
 	public String playList;
 
-	/**
-	 * Makes a new playlist pop up window to add name in.
-	 */
+	/** Constructor */
 	public PlayList() {
 
 		songs = new ArrayList<Music>();
@@ -20,21 +18,25 @@ public class PlayList {
 
 	}
 
+	/** Constructor */
 	public PlayList(String name) {
 		try {
 			songs = new ArrayList<Music>();
 			playList = name;
-			loadPlayList(playList); // Loads a playlist.
+			loadPlayList(playList);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 
+	/**
+	 * Writes given playlist to textfile.
+	 * 
+	 * @param name of file.
+	 */
 	public void savePlayList(String name) {
 		PrintWriter filout = null;
-
 		try {
-
 			filout = new PrintWriter(new BufferedWriter(new FileWriter(name + ".txt", false)));
 			String output = "";
 			@SuppressWarnings("unchecked")
@@ -45,33 +47,42 @@ public class PlayList {
 				CopySongs.remove(0);
 				filout.println(output);
 			}
-
-		}
-
-		catch (IOException e) {
-		}
-
-		finally {
 			filout.close();
-		}
 
+		} catch (IOException e) {
+		}
 	}
 
+	/**
+	 * Removes song from active playlist.
+	 * 
+	 * @param songName name of the song to be deleted from playlist.
+	 * @return false if the song doesn't exist. True if song name exists.
+	 */
 	public boolean removeSong(String songName) {
-		String pName = MusicPlayer.getPlayList;
-		pName = pName.replaceAll(".txt", "");
-		for (int i = 0; i < songs.size(); i++) {
-			if (songs.get(i).song.equals(songName)) {
-				songs.remove(i);
-				savePlayList(pName);
-				return true;
+		if (songName.equals("null") || songName == null) {
+			return false;
+		} else {
+			String pName = MusicPlayer.getPlayList;
+			pName = pName.replaceAll(".txt", "");
+			for (int i = 0; i < songs.size(); i++) {
+				if (songs.get(i).song.equals(songName)) {
+					songs.remove(i);
+					savePlayList(pName);
+					return true;
+				}
 			}
+			return false;
 		}
-		return false;
 
 	}
-	
-	/** Same as the one above but is only focused on the JUnit. */
+
+	/**
+	 * Same as the one above but is only focused on the JUnit.
+	 * 
+	 * @param songName name of the song to be deleted from playlist.
+	 * @return false if the song doesn't exist. True if song name exists.
+	 */
 	public boolean removeSongForTestCase(String songName) {
 		if (songName.equals("null") || songName == null) {
 			return false;
@@ -87,6 +98,13 @@ public class PlayList {
 		}
 	}
 
+	/**
+	 * Reads from a textfile (PlayList) and add it as <Music> to an
+	 * ArrayList-playlist.
+	 * 
+	 * @param name of the textfile.
+	 * @return the arraylist with music-element.
+	 */
 	public ArrayList<Music> loadPlayList(String name) {
 		try {
 			Scanner reader = new Scanner(new FileReader(new File(name + ".txt")));
@@ -105,9 +123,9 @@ public class PlayList {
 	}
 
 	/**
-	 * Creates a new .txt file with the chosen name.
+	 * Creates a new text file with the given name.
 	 * 
-	 * @param name is the name of the textdocument.
+	 * @param name of the textdocument.
 	 */
 	public void makePlaylist(String name) {
 		try {
@@ -150,6 +168,9 @@ public class PlayList {
 		}
 	}
 
+	/**
+	 * Used to print a playlist that looks like a table.
+	 */
 	public static void printPlayList() {
 		final Object[][] table = new String[songs.size()][];
 		for (int i = 0; i < songs.size(); i++) {
