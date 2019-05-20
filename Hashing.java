@@ -2,7 +2,6 @@
  * Class that creates a hashtabell that stores music objects. 
  * 
  * @author Andreas Stadin, Nicklas Kriström, Vidar Hårding and Oliver Olsson
- * @param <Music>
  */
 public class Hashing {
 
