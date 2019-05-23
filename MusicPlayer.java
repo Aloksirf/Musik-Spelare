@@ -1,3 +1,4 @@
+
 /**
  * Opens up a MusicPlayer that can:
  *  - Import .wav-files and play them.
@@ -84,6 +85,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 		pause.setIcon(new ImageIcon("Images/pause.png"));
 		stop.setIcon(new ImageIcon("Images/stop.png"));
 
+		// Makes sure you play the file based on the text in the textfield.
 		play.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				counter = 0;
@@ -92,6 +94,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			}
 		});
 
+		// Pauses the sound if it's playing. Resumes upon clicking again.
 		pause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (musicFile == null) {
@@ -109,6 +112,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			}
 		});
 
+		// Stops the sound if it's playing. Close the Clip upon clicking.
 		stop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				counter = 1;
@@ -279,7 +283,8 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			myPlayList.savePlayList(temp);
 		} else if (e.getActionCommand() == "About") {
 			playSound("victory.wav");
-			JOptionPane.showMessageDialog(this, "Made by:\n\nAndreas Stadin\nOliver Olsson\nVidar Hårding\nNicklas Kriström");
+			JOptionPane.showMessageDialog(this,
+					"Made by:\n\nAndreas Stadin\nOliver Olsson\nVidar Hårding\nNicklas Kriström");
 		} else if (e.getActionCommand() == "Add Song") {
 			String s = getPlayList.replaceAll(".txt", "");
 			if (s == null || s.equals("null")) {
@@ -287,9 +292,6 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 				JOptionPane.showMessageDialog(this, "Please open a playlist first.", "Error", 2);
 			} else {
 				getPlayList = s + ".txt";
-				System.out.println("\n------- Successfully loaded playlist: " + getPlayList + " -------");
-				myPlayList.loadPlayList(s);
-				PlayList.printPlayList();
 				while (true) {
 					String str = JOptionPane.showInputDialog(this, "Enter song to add\n\nTo exit: press 'Avbryt'.",
 							"Enter song name", 1);
@@ -299,7 +301,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 					boolean temp = myPlayList.addToPlayList(str, MainFile.library);
 					if (temp) {
 						JOptionPane.showMessageDialog(this, "Successfully added " + str + " to your playlist.");
-						System.out.println("\n------- Successfully loaded playlist: " + getPlayList + " -------");
+						System.out.println("\n-------------- Playlist: " + getPlayList + " --------------");
 						s = s.replaceAll(".txt", "");
 						myPlayList.savePlayList(s);
 						PlayList.printPlayList();
@@ -309,32 +311,33 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 				myPlayList.savePlayList(s);
 			}
 		} else if (e.getActionCommand() == "Remove Song") {
-			String s = getPlayList.replaceAll(".txt", "");
-			if (s == null || s.equals("null")) {
-			} else if (s.equals("Library")) {
-				JOptionPane.showMessageDialog(this, "Please open a playlist first.", "Error", 2);
+			if (PlayList.songs.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "\nPlaylist is empty. Unable to remove songs.", "Error", 2);
 			} else {
-				boolean removed;
-				System.out.println("\n------- Successfully loaded playlist: " + getPlayList + " -------");
-				myPlayList.loadPlayList(s);
-				PlayList.printPlayList();
-				while (true) {
-					String str = JOptionPane.showInputDialog(this, "Enter song to remove\n\nTo exit: press 'Avbryt'.",
-							"Enter song name to remove it", 1);
-					if (str == null || str.equals("null")) {
-						break;
+				String s = getPlayList.replaceAll(".txt", "");
+				if (s == null || s.equals("null")) {
+				} else if (s.equals("Library")) {
+					JOptionPane.showMessageDialog(this, "Please open a playlist first.", "Error", 2);
+				} else {
+					boolean removed;
+					while (true) {
+						String str = JOptionPane.showInputDialog(this,
+								"Enter song to remove\n\nTo exit: press 'Avbryt'.", "Enter song name to remove it", 1);
+						if (str == null || str.equals("null")) {
+							break;
+						}
+						removed = myPlayList.removeSong(str);
+						if (removed) {
+							JOptionPane.showMessageDialog(this, "Successfully removed " + str + " from your playlist.");
+							System.out.println("\n-------------- Playlist: " + getPlayList + " --------------");
+							myPlayList.loadPlayList(s);
+							PlayList.printPlayList();
+						} else {
+							System.out.println("\nSong not found. Be aware of letters with Upper Case");
+						}
 					}
-					removed = myPlayList.removeSong(str);
-					if (removed) {
-						JOptionPane.showMessageDialog(this, "Successfully removed " + str + " from your playlist.");
-						System.out.println("\n------- Successfully loaded playlist: " + getPlayList + " -------");
-						myPlayList.loadPlayList(s);
-						PlayList.printPlayList();
-					} else {
-						System.out.println("\nSong not found. Be aware of letters with Upper Case");
-					}
+					myPlayList.savePlayList(s);
 				}
-				myPlayList.savePlayList(s);
 			}
 		} else if (e.getActionCommand() == "New Playlist") {
 			String str = JOptionPane.showInputDialog(this, "Enter Playlist name: ", "Enter Playlist name", 1);
@@ -345,7 +348,7 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 				getPlayList = str + ".txt";
 				textPlayList.setText("Active Playlist:     " + getPlayList);
 				textPlayList.setBackground(Color.GREEN);
-				System.out.println("\n------- Successfully loaded playlist: " + getPlayList + " -------");
+				System.out.println("\n-------------- Playlist: " + getPlayList + " --------------");
 				myPlayList.loadPlayList(str);
 				PlayList.printPlayList();
 			}
@@ -371,6 +374,8 @@ public class MusicPlayer extends JFrame implements ActionListener, KeyListener {
 			System.out.println("\n------------- Printing Library File ------------");
 			myPlayList.loadPlayList("Library");
 			PlayList.printPlayList();
+			String temp = getPlayList.replaceAll(".txt", "");
+			myPlayList.loadPlayList(temp);
 		} else if (e.getActionCommand() == "Exit") {
 			int result = JOptionPane.showConfirmDialog(this, "Do you really want to exit?", "Are you sure?",
 					JOptionPane.OK_CANCEL_OPTION);
